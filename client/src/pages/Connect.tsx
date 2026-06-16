@@ -1,0 +1,467 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
+import { Mail, ExternalLink, Send, CheckCircle, AlertCircle, Loader } from "lucide-react";
+import { motion } from "framer-motion";
+import PageWrapper from "@/components/PageWrapper";
+import Footer from "@/components/Footer";
+
+// ─── CONFIGURATION ────────────────────────────────────────────────────────────
+const FORMSPREE_FORM_ID = "YOUR_FORMSPREE_FORM_ID";
+const MAILCHIMP_ACTION_URL = "YOUR_MAILCHIMP_ACTION_URL";
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface ContactFormErrors {
+  name?: string;
+  email?: string;
+  subject?: string;
+  message?: string;
+}
+
+interface NewsletterErrors {
+  email?: string;
+}
+
+export default function Connect() {
+  const [, navigate] = useLocation();
+
+  const [contactForm, setContactForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const [contactStatus, setContactStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [contactErrors, setContactErrors] = useState<ContactFormErrors>({});
+  
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [newsletterErrors, setNewsletterErrors] = useState<NewsletterErrors>({});
+
+  const socials = [
+    { name: "Twitter / X", handle: "@Rubber_Succubus", url: "https://x.com/rubber_succubus", icon: "𝕏", live: true },
+    { name: "Telegram", handle: "@Rubber_Succubus", url: "https://t.me/rubber_succubus", icon: "✈️", live: true },
+    { name: "Linktree", handle: "Rubber_Succubus", url: "https://linktr.ee/Rubber_Succubus", icon: "🔗", live: true },
+    { name: "Instagram", handle: "[Coming soon]", url: "#", icon: "📷", live: false },
+    { name: "FetLife", handle: "[Coming soon]", url: "#", icon: "🖤", live: false },
+    { name: "OnlyFans", handle: "[Coming soon]", url: "#", icon: "🔞", live: false },
+    { name: "Throne Wishlist", handle: "[Coming soon]", url: "#", icon: "👑", live: false },
+    { name: "Reddit", handle: "[Coming soon]", url: "#", icon: "🤖", live: false },
+    { name: "Bluesky", handle: "[Coming soon]", url: "#", icon: "🦋", live: false },
+  ];
+
+  // Validate contact form
+  const validateContactForm = (): boolean => {
+    const newErrors: ContactFormErrors = {};
+
+    if (!contactForm.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (contactForm.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters";
+    }
+
+    if (!contactForm.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!contactForm.subject.trim()) {
+      newErrors.subject = "Subject is required";
+    } else if (contactForm.subject.trim().length < 3) {
+      newErrors.subject = "Subject must be at least 3 characters";
+    }
+
+    if (!contactForm.message.trim()) {
+      newErrors.message = "Message is required";
+    } else if (contactForm.message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters";
+    }
+
+    setContactErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Validate newsletter email
+  const validateNewsletterEmail = (): boolean => {
+    const newErrors: NewsletterErrors = {};
+
+    if (!newsletterEmail.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletterEmail)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    setNewsletterErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateContactForm()) {
+      return;
+    }
+
+    if (FORMSPREE_FORM_ID === "YOUR_FORMSPREE_FORM_ID") {
+      const subject = encodeURIComponent(contactForm.subject || "Inquiry from Rubber Succubus site");
+      const body = encodeURIComponent(`Name: ${contactForm.name}\nEmail: ${contactForm.email}\n\n${contactForm.message}`);
+      window.location.href = `mailto:rubbersuccubusbiz@gmail.com?subject=${subject}&body=${body}`;
+      return;
+    }
+
+    setContactStatus("sending");
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(contactForm),
+      });
+      if (res.ok) {
+        setContactStatus("success");
+        setContactForm({ name: "", email: "", subject: "", message: "" });
+        setContactErrors({});
+        setTimeout(() => setContactStatus("idle"), 5000);
+      } else {
+        setContactStatus("error");
+      }
+    } catch {
+      setContactStatus("error");
+    }
+  };
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateNewsletterEmail()) {
+      return;
+    }
+
+    if (MAILCHIMP_ACTION_URL === "YOUR_MAILCHIMP_ACTION_URL") {
+      window.location.href = `mailto:rubbersuccubusbiz@gmail.com?subject=Newsletter%20Signup&body=Please%20add%20me%20to%20your%20newsletter%3A%20${encodeURIComponent(newsletterEmail)}`;
+      return;
+    }
+
+    setNewsletterStatus("sending");
+    try {
+      const formData = new FormData();
+      formData.append("EMAIL", newsletterEmail);
+      await fetch(MAILCHIMP_ACTION_URL, { method: "POST", body: formData, mode: "no-cors" });
+      setNewsletterStatus("success");
+      setNewsletterEmail("");
+      setNewsletterErrors({});
+      setTimeout(() => setNewsletterStatus("idle"), 5000);
+    } catch {
+      setNewsletterStatus("error");
+    }
+  };
+
+  return (
+    <PageWrapper>
+      <div className="pb-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="pt-12 mb-16"
+          >
+            <h1 className="text-4xl md:text-5xl font-serif italic mb-4">Let's Connect</h1>
+            <div className="garnet-rule max-w-[50px] mb-6" />
+            <p className="text-cream/60 max-w-2xl text-base md:text-lg font-light leading-relaxed">
+              Follow me across all platforms to stay updated on new content, behind-the-scenes moments, and exclusive drops.
+            </p>
+          </motion.div>
+
+          {/* Social Links Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+            className="mb-16"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+              {socials.map((social, i) => (
+                <motion.a
+                  key={i}
+                  href={social.live ? social.url : undefined}
+                  target={social.live ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 + i * 0.04, duration: 0.3 }}
+                  whileHover={social.live ? { y: -3, borderColor: "rgba(185, 28, 28, 0.5)" } : {}}
+                  className={`p-5 border bg-black/30 transition-all block rounded-sm ${
+                    social.live
+                      ? "border-red-900/30 hover:bg-red-950/15 cursor-pointer"
+                      : "border-red-900/15 opacity-40 cursor-not-allowed"
+                  }`}
+                  onClick={(e) => { if (!social.live) e.preventDefault(); }}
+                >
+                  <div className="text-3xl mb-2">{social.icon}</div>
+                  <h3 className="font-serif italic text-sm md:text-base mb-0.5">{social.name}</h3>
+                  <p className="text-xs text-cream/45">{social.handle}</p>
+                  {social.live && (
+                    <div className="flex items-center gap-1 text-[10px] text-red-400/70 mt-2 uppercase tracking-wider">
+                      Visit <ExternalLink className="w-2.5 h-2.5" />
+                    </div>
+                  )}
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Email Contact */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="p-6 md:p-8 border border-red-900/30 bg-red-950/8 rounded-sm mb-8"
+          >
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 bg-red-950/40 border border-red-900/40 rounded-sm flex items-center justify-center flex-shrink-0">
+                <Mail className="w-5 h-5 text-red-400" />
+              </div>
+              <div>
+                <h3 className="font-serif italic text-lg mb-1">Email</h3>
+                <p className="text-cream/50 text-sm mb-3 font-light">For custom orders, inquiries, or just to chat:</p>
+                <a href="mailto:rubbersuccubusbiz@gmail.com" className="text-red-400 hover:text-red-300 transition-colors text-sm underline underline-offset-2">
+                  rubbersuccubusbiz@gmail.com
+                </a>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Contact Form */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="p-6 md:p-8 border border-red-900/25 bg-black/30 rounded-sm mb-8"
+          >
+            <h3 className="font-serif italic text-2xl mb-2">Send a Message</h3>
+            <p className="text-cream/45 text-sm mb-6 font-light">
+              Fill out the form below and your message will be sent directly to my inbox.
+            </p>
+
+            {contactStatus === "success" ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center gap-3 text-green-400 p-5 border border-green-900/40 bg-green-950/15 rounded-sm"
+              >
+                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                <span className="text-sm">Message sent! I'll get back to you soon.</span>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleContactSubmit} className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                      Name <span className="text-red-400">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={contactForm.name}
+                        onChange={(e) => {
+                          setContactForm({ ...contactForm, name: e.target.value });
+                          if (contactErrors.name) setContactErrors({ ...contactErrors, name: undefined });
+                        }}
+                        placeholder="Your name"
+                        className={`w-full bg-black/50 border px-4 py-4 text-base sm:text-sm text-cream placeholder-cream/25 focus:outline-none focus:bg-black/70 transition-all rounded-sm ${
+                          contactErrors.name ? "border-red-500 focus:border-red-500" : "border-red-900/30 focus:border-red-600"
+                        }`}
+                      />
+                      {contactErrors.name && (
+                        <AlertCircle className="absolute right-3 top-3.5 w-4 h-4 text-red-400" />
+                      )}
+                    </div>
+                    {contactErrors.name && (
+                      <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {contactErrors.name}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                      Email <span className="text-red-400">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="email"
+                        value={contactForm.email}
+                        onChange={(e) => {
+                          setContactForm({ ...contactForm, email: e.target.value });
+                          if (contactErrors.email) setContactErrors({ ...contactErrors, email: undefined });
+                        }}
+                        placeholder="your@email.com"
+                        className={`w-full bg-black/50 border px-4 py-4 text-base sm:text-sm text-cream placeholder-cream/25 focus:outline-none focus:bg-black/70 transition-all rounded-sm ${
+                          contactErrors.email ? "border-red-500 focus:border-red-500" : "border-red-900/30 focus:border-red-600"
+                        }`}
+                      />
+                      {contactErrors.email && (
+                        <AlertCircle className="absolute right-3 top-3.5 w-4 h-4 text-red-400" />
+                      )}
+                    </div>
+                    {contactErrors.email && (
+                      <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {contactErrors.email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                    Subject <span className="text-red-400">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={contactForm.subject}
+                      onChange={(e) => {
+                        setContactForm({ ...contactForm, subject: e.target.value });
+                        if (contactErrors.subject) setContactErrors({ ...contactErrors, subject: undefined });
+                      }}
+                      placeholder="Custom order, collaboration, general inquiry..."
+                      className={`w-full bg-black/50 border px-4 py-4 text-base sm:text-sm text-cream placeholder-cream/25 focus:outline-none focus:bg-black/70 transition-all rounded-sm ${
+                        contactErrors.subject ? "border-red-500 focus:border-red-500" : "border-red-900/30 focus:border-red-600"
+                      }`}
+                    />
+                    {contactErrors.subject && (
+                      <AlertCircle className="absolute right-3 top-3.5 w-4 h-4 text-red-400" />
+                    )}
+                  </div>
+                  {contactErrors.subject && (
+                    <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {contactErrors.subject}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                    Message <span className="text-red-400">*</span>
+                  </label>
+                  <div className="relative">
+                    <textarea
+                      rows={5}
+                      value={contactForm.message}
+                      onChange={(e) => {
+                        setContactForm({ ...contactForm, message: e.target.value });
+                        if (contactErrors.message) setContactErrors({ ...contactErrors, message: undefined });
+                      }}
+                      placeholder="Tell me what you're looking for..."
+                      className={`w-full bg-black/50 border px-4 py-3 text-cream placeholder-cream/25 focus:outline-none focus:bg-black/70 transition-all rounded-sm resize-none text-sm ${
+                        contactErrors.message ? "border-red-500 focus:border-red-500" : "border-red-900/30 focus:border-red-600"
+                      }`}
+                    />
+                    {contactErrors.message && (
+                      <AlertCircle className="absolute right-3 top-3.5 w-4 h-4 text-red-400" />
+                    )}
+                  </div>
+                  {contactErrors.message && (
+                    <p className="text-xs text-red-400 mt-1.5 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {contactErrors.message}
+                    </p>
+                  )}
+                </div>
+                {contactStatus === "error" && (
+                  <div className="flex items-center gap-3 text-red-400 text-sm p-3 border border-red-900/30 bg-red-950/10 rounded-sm">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                    <span>Something went wrong. Please email me directly.</span>
+                  </div>
+                )}
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <Button
+                    type="submit"
+                    disabled={contactStatus === "sending"}
+                    className="btn-sheen bg-red-700 hover:bg-red-600 disabled:bg-red-900 disabled:cursor-not-allowed text-white px-8 py-3 uppercase tracking-wider font-semibold flex items-center gap-2 text-sm transition-all"
+                  >
+                    {contactStatus === "sending" ? (
+                      <>
+                        <Loader className="w-4 h-4 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        Send Message
+                      </>
+                    )}
+                  </Button>
+                </motion.div>
+              </form>
+            )}
+          </motion.div>
+
+          {/* Newsletter Signup */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="p-6 md:p-8 border border-red-900/25 bg-black/30 rounded-sm"
+          >
+            <h3 className="font-serif italic text-2xl mb-2">Stay in the Loop</h3>
+            <p className="text-cream/50 text-sm mb-6 font-light">
+              Get notified when new content drops, special offers, and exclusive announcements.
+            </p>
+            {newsletterStatus === "success" ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center gap-3 text-green-400 p-5 border border-green-900/40 bg-green-950/15 rounded-sm"
+              >
+                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                <span className="text-sm">You're subscribed! Welcome to the inner circle.</span>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-2">
+                <div className="relative">
+                  <input
+                    type="email"
+                    value={newsletterEmail}
+                    onChange={(e) => {
+                      setNewsletterEmail(e.target.value);
+                      if (newsletterErrors.email) setNewsletterErrors({ email: undefined });
+                    }}
+                    placeholder="your@email.com"
+                    className={`w-full bg-black/50 border px-4 py-3 text-cream placeholder-cream/25 focus:outline-none focus:bg-black/70 transition-all rounded-sm text-sm ${
+                      newsletterErrors.email ? "border-red-500 focus:border-red-500" : "border-red-900/30 focus:border-red-600"
+                    }`}
+                  />
+                  {newsletterErrors.email && (
+                    <AlertCircle className="absolute right-3 top-3.5 w-4 h-4 text-red-400" />
+                  )}
+                </div>
+                {newsletterErrors.email && (
+                  <p className="text-xs text-red-400 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {newsletterErrors.email}
+                  </p>
+                )}
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <Button
+                    type="submit"
+                    disabled={newsletterStatus === "sending"}
+                    className="btn-sheen bg-red-700 hover:bg-red-600 disabled:bg-red-900 disabled:cursor-not-allowed text-white px-6 py-3 uppercase tracking-wider font-semibold text-sm transition-all flex items-center justify-center gap-2"
+                  >
+                    {newsletterStatus === "sending" ? (
+                      <>
+                        <Loader className="w-4 h-4 animate-spin" />
+                        Subscribing...
+                      </>
+                    ) : (
+                      "Subscribe"
+                    )}
+                  </Button>
+                </motion.div>
+              </form>
+            )}
+          </motion.div>
+        </div>
+      </div>
+
+      <Footer />
+    </PageWrapper>
+  );
+}
