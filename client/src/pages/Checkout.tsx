@@ -5,6 +5,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import { brand, getService, integrations, isConfigured } from "@/config/site";
+import { emailError, requiredText } from "@/lib/validation";
 
 interface FormErrors {
   name?: string;
@@ -31,22 +32,13 @@ export default function Checkout() {
 
   // Validation function
   const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!form.name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (form.name.trim().length < 2) {
-      newErrors.name = "Name must be at least 2 characters";
-    }
-
-    if (!form.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
+    const newErrors: FormErrors = {
+      name: requiredText(form.name, "Name", 2),
+      email: emailError(form.email),
+    };
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.values(newErrors).every((error) => !error);
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -168,11 +160,12 @@ export default function Checkout() {
                 <form onSubmit={handleFormSubmit} className="space-y-4">
                   {/* Name Field */}
                   <div>
-                    <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                    <label htmlFor="checkout-name" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
                       Your Name <span className="text-red-400">*</span>
                     </label>
                     <div className="relative">
                       <input
+                        id="checkout-name"
                         type="text"
                         value={form.name}
                         onChange={(e) => {
@@ -198,11 +191,12 @@ export default function Checkout() {
 
                   {/* Email Field */}
                   <div>
-                    <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                    <label htmlFor="checkout-email" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
                       Email <span className="text-red-400">*</span>
                     </label>
                     <div className="relative">
                       <input
+                        id="checkout-email"
                         type="email"
                         value={form.email}
                         onChange={(e) => {
@@ -228,8 +222,9 @@ export default function Checkout() {
 
                   {/* Project Details */}
                   <div>
-                    <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">Project Vision</label>
+                    <label htmlFor="checkout-details" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">Project Vision</label>
                     <textarea
+                      id="checkout-details"
                       rows={4}
                       value={form.details}
                       onChange={(e) => setForm({ ...form, details: e.target.value })}

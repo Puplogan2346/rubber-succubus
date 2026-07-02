@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { brand, integrations, isConfigured, socialLinks } from "@/config/site";
+import { emailError, requiredText } from "@/lib/validation";
 
 interface ContactFormErrors {
   name?: string;
@@ -31,48 +32,23 @@ export default function Connect() {
 
   // Validate contact form
   const validateContactForm = (): boolean => {
-    const newErrors: ContactFormErrors = {};
-
-    if (!contactForm.name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (contactForm.name.trim().length < 2) {
-      newErrors.name = "Name must be at least 2 characters";
-    }
-
-    if (!contactForm.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    if (!contactForm.subject.trim()) {
-      newErrors.subject = "Subject is required";
-    } else if (contactForm.subject.trim().length < 3) {
-      newErrors.subject = "Subject must be at least 3 characters";
-    }
-
-    if (!contactForm.message.trim()) {
-      newErrors.message = "Message is required";
-    } else if (contactForm.message.trim().length < 10) {
-      newErrors.message = "Message must be at least 10 characters";
-    }
+    const newErrors: ContactFormErrors = {
+      name: requiredText(contactForm.name, "Name", 2),
+      email: emailError(contactForm.email),
+      subject: requiredText(contactForm.subject, "Subject", 3),
+      message: requiredText(contactForm.message, "Message", 10),
+    };
 
     setContactErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.values(newErrors).every((error) => !error);
   };
 
   // Validate newsletter email
   const validateNewsletterEmail = (): boolean => {
-    const newErrors: NewsletterErrors = {};
-
-    if (!newsletterEmail.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletterEmail)) {
-      newErrors.email = "Please enter a valid email address";
-    }
+    const newErrors: NewsletterErrors = { email: emailError(newsletterEmail) };
 
     setNewsletterErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return !newErrors.email;
   };
 
   const handleContactSubmit = async (e: React.FormEvent) => {
@@ -237,11 +213,12 @@ export default function Connect() {
               <form onSubmit={handleContactSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                    <label htmlFor="contact-name" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
                       Name <span className="text-red-400">*</span>
                     </label>
                     <div className="relative">
                       <input
+                        id="contact-name"
                         type="text"
                         value={contactForm.name}
                         onChange={(e) => {
@@ -265,11 +242,12 @@ export default function Connect() {
                     )}
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                    <label htmlFor="contact-email" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
                       Email <span className="text-red-400">*</span>
                     </label>
                     <div className="relative">
                       <input
+                        id="contact-email"
                         type="email"
                         value={contactForm.email}
                         onChange={(e) => {
@@ -294,11 +272,12 @@ export default function Connect() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                  <label htmlFor="contact-subject" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
                     Subject <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
                     <input
+                      id="contact-subject"
                       type="text"
                       value={contactForm.subject}
                       onChange={(e) => {
@@ -322,11 +301,12 @@ export default function Connect() {
                   )}
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                  <label htmlFor="contact-message" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
                     Message <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
                     <textarea
+                      id="contact-message"
                       rows={5}
                       value={contactForm.message}
                       onChange={(e) => {
@@ -403,6 +383,7 @@ export default function Connect() {
                 <div className="relative">
                   <input
                     type="email"
+                    aria-label="Email address for newsletter"
                     value={newsletterEmail}
                     onChange={(e) => {
                       setNewsletterEmail(e.target.value);
