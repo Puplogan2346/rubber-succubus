@@ -20,7 +20,6 @@ export default function Navigation() {
 
   const handleNavigation = (path: string) => {
     navigate(path);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
