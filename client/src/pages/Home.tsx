@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Camera, Film, HelpCircle, Calendar, Link2, ArrowRight } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
-import { brand } from "@/config/site";
+import { brand, testimonials } from "@/config/site";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Home() {
@@ -212,6 +212,44 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
+
+        {/* Testimonials Section — hidden until entries exist in site.ts */}
+        {testimonials.length > 0 && (
+          <section className="py-20 px-6 border-t border-red-900/15 bg-gradient-to-b from-black to-red-950/3">
+            <div className="max-w-5xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5 }}
+              >
+                <h2 className="text-3xl md:text-4xl font-serif italic text-center mb-4">Kind Words</h2>
+                <div className="garnet-rule max-w-[60px] mx-auto mb-14" />
+              </motion.div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {testimonials.map((testimonial, i) => (
+                  <motion.figure
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ delay: i * 0.08, duration: 0.4 }}
+                    className="relative p-6 border border-red-900/25 bg-black/30 rounded-sm overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+                    <blockquote className="text-cream/75 italic font-light leading-relaxed mb-4">
+                      "{testimonial.quote}"
+                    </blockquote>
+                    <figcaption className="text-[10px] uppercase tracking-widest text-red-400/70">
+                      — {testimonial.attribution}
+                    </figcaption>
+                  </motion.figure>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Newsletter Section */}
         <section className="py-20 px-6 border-t border-red-900/15 bg-gradient-to-b from-black to-red-950/3">

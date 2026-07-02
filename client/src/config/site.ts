@@ -294,6 +294,36 @@ export const primarySocials: SocialLink[] = [
   },
 ];
 
+// ─── ANNOUNCEMENT BANNER ──────────────────────────────────────────────────────
+// Set `message` to show a slim banner under the navigation on every page —
+// e.g. a content drop, live session, or event. Leave it "" to hide the banner.
+// Add `targetDate` (ISO string, e.g. "2026-08-01T20:00:00-07:00") for a live
+// countdown next to the message; it disappears once the date passes.
+
+export interface Announcement {
+  message: string;
+  targetDate?: string;
+  linkText?: string;
+  /** Internal route ("/connect") or external URL */
+  linkHref?: string;
+}
+
+export const announcement: Announcement = {
+  message: "",
+};
+
+// ─── TESTIMONIALS ─────────────────────────────────────────────────────────────
+// Anonymous fan/client reviews shown on the Home page. The section stays
+// hidden until at least one entry exists.
+// Example: { quote: "Worth every penny — the attention to detail is unreal.", attribution: "Custom order client" }
+
+export interface Testimonial {
+  quote: string;
+  attribution: string;
+}
+
+export const testimonials: Testimonial[] = [];
+
 // ─── INTEGRATIONS ─────────────────────────────────────────────────────────────
 // Replace the "YOUR_..." placeholders with real values to activate each
 // integration. Until then the site falls back to mailto: links / placeholder

@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { brand, primarySocials } from "@/config/site";
+import AnnouncementBanner from "./AnnouncementBanner";
 
 const navSocials = primarySocials.filter((social) => social.icon);
 
@@ -110,6 +111,7 @@ export default function Navigation() {
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
+        <AnnouncementBanner />
       </nav>
 
       {/* Mobile Menu Overlay */}
