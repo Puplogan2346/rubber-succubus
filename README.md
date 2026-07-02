@@ -8,7 +8,7 @@ The website for [rubbersuccubus.com](https://rubbersuccubus.com) — a React + V
 
 - [ ] **Custom domain**: in Netlify → Site settings → Domain management, add `rubbersuccubus.com`, then point your registrar's DNS at Netlify. (Or use GitHub Pages instead: Settings → Pages → Source → "GitHub Actions" — the workflow and CNAME are already in place.)
 - [ ] **Prices & content**: replace the `[Add your pricing]` placeholders and event TBDs in `client/src/config/site.ts`.
-- [ ] **Gallery photos**: the Portfolio page shows placeholders until real images are wired in.
+- [ ] **Gallery photos**: drop images into `client/public/gallery/` and reference them in `galleryItems` (see "Adding your photos" below).
 - [ ] **Integrations** (optional, forms fall back to email until then): Stripe, Formspree, Mailchimp, Google Calendar — see below.
 - [ ] **Engagement extras** (optional): announcement/countdown banner and testimonials — see below.
 - [ ] Optional: rename the Netlify site (it's currently spelled with three b's).
@@ -32,13 +32,24 @@ pnpm preview   # serve the production build locally
 | Services, descriptions, **prices** | `services` |
 | FAQ questions and answers | `faqItems` |
 | Upcoming events | `upcomingEvents` |
-| Gallery placeholders | `galleryItems` |
+| Gallery photos/videos | `galleryItems` |
 | Social media links (set `live: true` + real URL to activate a tile) | `socialLinks` |
 | Announcement/countdown banner (set `message`, optional `targetDate`) | `announcement` |
 | Fan/client testimonials on Home (section hidden while empty) | `testimonials` |
 | Stripe / Formspree / Mailchimp / Google Calendar | `integrations` |
 
 Pages contain layout only — you shouldn't need to touch them for content updates.
+
+### Adding your photos
+
+1. Drop image files into `client/public/gallery/` (WebP or JPEG, ideally ≤ 500 KB each).
+2. In `site.ts`, give a `galleryItems` entry a `src` and `alt`:
+   ```ts
+   { id: 1, type: "photo", aspect: "aspect-[3/4]", src: "/gallery/latex-01.webp", alt: "Black latex catsuit, studio shot", caption: "Studio session, 2026" },
+   ```
+3. Commit and push — the site redeploys automatically.
+
+Tiles without a `src` keep showing placeholders, and the "Gallery Coming Soon" card disappears as soon as one real image exists. For video, `src` is a thumbnail image and `href` links out to wherever the clip is hosted.
 
 ## Activating integrations
 
