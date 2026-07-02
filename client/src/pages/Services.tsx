@@ -4,8 +4,27 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
-import { services } from "@/config/site";
+import { commissions, services } from "@/config/site";
 import { usePageMeta } from "@/hooks/usePageMeta";
+
+const PROCESS_STEPS = [
+  {
+    title: "Send your brief",
+    copy: "Use the custom order builder or the contact form — format, vibe, budget, timeline.",
+  },
+  {
+    title: "We talk it through",
+    copy: "I reply within 48 hours with questions, ideas, and a firm quote.",
+  },
+  {
+    title: "50% deposit books it",
+    copy: "Your slot is locked in. The balance is due before final delivery.",
+  },
+  {
+    title: "Create & deliver",
+    copy: "Standard turnaround is 2-3 weeks, with up to 2 rounds of revisions included.",
+  },
+];
 
 export default function Services() {
   usePageMeta({ title: "Services", description: "Custom photography, videography, social content, and bespoke orders. Book a session with Rubber Succubus." });
@@ -28,6 +47,14 @@ export default function Services() {
               Custom content creation tailored to your vision. Whether you need photography, videography,
               or something completely unique, let's make it happen.
             </p>
+            {commissions.status !== "open" && (
+              <p className="mt-5 inline-block text-xs uppercase tracking-widest px-4 py-2 border border-red-900/40 bg-red-950/20 text-red-300/90 rounded-sm">
+                {commissions.status === "waitlist"
+                  ? "Currently waitlist only — new briefs join the queue"
+                  : "Commissions are closed right now — follow socials for reopening"}
+                {commissions.note ? ` · ${commissions.note}` : ""}
+              </p>
+            )}
           </motion.div>
 
           {/* Services Grid */}
@@ -78,10 +105,12 @@ export default function Services() {
                   </div>
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
-                      onClick={() => navigate(`/checkout/${service.id}`)}
+                      onClick={() =>
+                        navigate(service.id === "custom-order" ? "/custom-order" : `/checkout/${service.id}`)
+                      }
                       className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-5 py-2 text-xs uppercase tracking-wider flex items-center gap-2"
                     >
-                      Book Now
+                      {service.id === "custom-order" ? "Start a Brief" : "Book Now"}
                       <ArrowRight className="w-3 h-3" />
                     </Button>
                   </motion.div>
@@ -89,6 +118,39 @@ export default function Services() {
               </motion.div>
             ))}
           </div>
+
+          {/* How it works */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5 }}
+            className="mt-20"
+          >
+            <h2 className="text-3xl md:text-4xl font-serif italic mb-3">How It Works</h2>
+            <div className="garnet-rule max-w-[40px] mb-10" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {PROCESS_STEPS.map((processStep, i) => (
+                <motion.div
+                  key={processStep.title}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ delay: i * 0.08, duration: 0.4 }}
+                  className="relative p-6 pt-10 border border-red-900/25 bg-black/30 rounded-sm overflow-hidden"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="absolute -top-4 -right-1 font-serif italic text-[5.5rem] leading-none text-red-950/50 select-none pointer-events-none"
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="relative font-serif italic text-lg mb-2">{processStep.title}</h3>
+                  <p className="relative text-sm text-cream/50 font-light leading-relaxed">{processStep.copy}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
 
           {/* Custom Order CTA */}
           <motion.div
@@ -100,15 +162,15 @@ export default function Services() {
           >
             <h3 className="text-2xl md:text-3xl font-serif italic mb-4">Have Something Specific in Mind?</h3>
             <p className="text-cream/50 mb-8 max-w-lg mx-auto font-light">
-              If none of the above fit exactly what you're looking for, reach out.
+              If none of the above fit exactly what you're looking for, build me a brief.
               I love custom projects and pushing creative boundaries.
             </p>
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
               <Button
-                onClick={() => navigate("/connect")}
+                onClick={() => navigate(commissions.status === "closed" ? "/connect" : "/custom-order")}
                 className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold"
               >
-                Get in Touch
+                {commissions.status === "closed" ? "Get in Touch" : "Build Your Custom Order"}
               </Button>
             </motion.div>
           </motion.div>

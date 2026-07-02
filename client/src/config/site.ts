@@ -26,7 +26,24 @@ export const brand = {
   description:
     "Rubber Succubus — Custom content creation. Photography, videography, and bespoke content. 18+ only.",
   twitterUrl: "https://x.com/rubber_succubus",
+  /** Shown on the Connect page as a trust signal */
+  responseTime: "Typically replies within 48 hours",
 } as const;
+
+// ─── COMMISSIONS STATUS ───────────────────────────────────────────────────────
+// Shown as a live-status chip in the navigation and adapts the Services CTAs.
+// "open" → green dot + "Commissions open"; "waitlist" → amber; "closed" → red.
+
+export type CommissionsStatus = "open" | "waitlist" | "closed";
+
+export const commissions: { status: CommissionsStatus; note?: string } = {
+  status: "open",
+};
+
+// ─── EDITORIAL TICKER ─────────────────────────────────────────────────────────
+// Words for the slow-scrolling marquee strip on the Home page.
+
+export const tickerWords = ["Rubber", "Latex", "Shine", "Custom", "Obsidian", "Bespoke"];
 
 // ─── SERVICES ─────────────────────────────────────────────────────────────────
 
@@ -336,6 +353,26 @@ export interface Testimonial {
 }
 
 export const testimonials: Testimonial[] = [];
+
+// ─── THE VAULT (exclusive content teaser) ─────────────────────────────────────
+// Set `url` to your paid-content page (OnlyFans etc.) to show a teaser section
+// of blurred locked tiles on the Home page. Leave "" to hide it entirely.
+
+export const vault = {
+  url: "",
+  label: "Unlock everything",
+};
+
+// ─── THEMED DAYS ──────────────────────────────────────────────────────────────
+// Weekly content themes shown as chips on the Events page, e.g.
+// { day: "Friday", theme: "Rubber Friday" }. Empty array hides the strip.
+
+export interface ThemedDay {
+  day: string;
+  theme: string;
+}
+
+export const themedDays: ThemedDay[] = [];
 
 // ─── INTEGRATIONS ─────────────────────────────────────────────────────────────
 // Replace the "YOUR_..." placeholders with real values to activate each

@@ -4,6 +4,10 @@ import { motion } from "framer-motion";
 import { Camera, Film, HelpCircle, Calendar, Link2, ArrowRight } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
+import Ticker from "@/components/Ticker";
+import HeroShine from "@/components/HeroShine";
+import VaultTeaser from "@/components/VaultTeaser";
+import StickyBookCTA from "@/components/StickyBookCTA";
 import { brand, testimonials } from "@/config/site";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
@@ -51,6 +55,9 @@ export default function Home() {
           {/* Overlay gradients for text readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60" />
+
+          {/* Cursor-tracking specular shine */}
+          <HeroShine />
 
           {/* Content */}
           <div className="relative h-full flex items-center justify-center px-6">
@@ -134,6 +141,9 @@ export default function Home() {
             </motion.div>
           </div>
         </section>
+
+        {/* Editorial ticker */}
+        <Ticker />
 
         {/* Explore Section */}
         <section className="py-20 px-6 border-y border-red-900/15 bg-gradient-to-b from-black to-red-950/5">
@@ -251,6 +261,9 @@ export default function Home() {
           </section>
         )}
 
+        {/* The Vault — hidden until vault.url is set in site.ts */}
+        <VaultTeaser />
+
         {/* Newsletter Section */}
         <section className="py-20 px-6 border-t border-red-900/15 bg-gradient-to-b from-black to-red-950/3">
           <div className="max-w-2xl mx-auto">
@@ -280,6 +293,8 @@ export default function Home() {
 
         <Footer />
       </div>
+
+      <StickyBookCTA />
     </div>
   );
 }

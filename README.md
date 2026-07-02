@@ -36,6 +36,10 @@ pnpm preview   # serve the production build locally
 | Social media links (set `live: true` + real URL to activate a tile) | `socialLinks` |
 | Announcement/countdown banner (set `message`, optional `targetDate`) | `announcement` |
 | Fan/client testimonials on Home (section hidden while empty) | `testimonials` |
+| Commissions status chip in the nav (`open` / `waitlist` / `closed`) | `commissions` |
+| "The Vault" teaser on Home (set `url` to your OnlyFans/paid page) | `vault` |
+| Themed content days on Events ("Rubber Friday") | `themedDays` |
+| Marquee ticker words on Home | `tickerWords` |
 | Stripe / Formspree / Mailchimp / Google Calendar | `integrations` |
 
 Pages contain layout only — you shouldn't need to touch them for content updates.

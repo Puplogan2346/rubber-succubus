@@ -2,10 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { brand, primarySocials } from "@/config/site";
+import { brand, commissions, primarySocials } from "@/config/site";
 import AnnouncementBanner from "./AnnouncementBanner";
 
 const navSocials = primarySocials.filter((social) => social.icon);
+
+const COMMISSION_CHIP = {
+  open: { label: "Commissions open", dot: "bg-emerald-400", text: "text-emerald-300/80" },
+  waitlist: { label: "Waitlist only", dot: "bg-amber-400", text: "text-amber-300/80" },
+  closed: { label: "Commissions closed", dot: "bg-red-500", text: "text-red-400/80" },
+} as const;
 
 const navItems = [
   { label: "Services", path: "/services" },
@@ -62,6 +68,21 @@ export default function Navigation() {
               {brand.name}
             </span>
           </button>
+
+          {/* Commissions status */}
+          <div
+            className={`hidden lg:flex items-center gap-2 text-[10px] uppercase tracking-widest ${COMMISSION_CHIP[commissions.status].text}`}
+          >
+            <span className="relative flex w-2 h-2">
+              <span
+                className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-60 ${COMMISSION_CHIP[commissions.status].dot}`}
+              />
+              <span
+                className={`relative inline-flex rounded-full w-2 h-2 ${COMMISSION_CHIP[commissions.status].dot}`}
+              />
+            </span>
+            {COMMISSION_CHIP[commissions.status].label}
+          </div>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-1">

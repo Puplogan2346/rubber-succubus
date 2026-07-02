@@ -248,6 +248,25 @@ html {
     color: oklch(0.42 0.18 20);
   }
 
+  /* Accent font (Bebas Neue) */
+  .font-accent {
+    font-family: 'Bebas Neue', sans-serif;
+  }
+
+  /* Editorial marquee ticker */
+  @keyframes ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .animate-ticker {
+    animation: ticker-scroll 40s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-ticker {
+      animation-play-state: paused;
+    }
+  }
+
   /* Sheen button */
   .btn-sheen {
     position: relative;

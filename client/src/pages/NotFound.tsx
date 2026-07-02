@@ -23,10 +23,11 @@ export default function NotFound() {
           <span className="text-7xl md:text-8xl font-serif italic text-red-400/80">404</span>
         </div>
 
-        <h1 className="text-2xl font-serif italic mb-3">Page Not Found</h1>
+        <h1 className="text-2xl font-serif italic mb-3">This page is tied up at the moment</h1>
 
         <p className="text-cream/50 text-sm mb-8 leading-relaxed">
-          Sorry, the page you're looking for doesn't exist or has been moved.
+          Whatever you were looking for isn't here — it either escaped or never existed.
+          Head back and try something shinier.
         </p>
 
         <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>

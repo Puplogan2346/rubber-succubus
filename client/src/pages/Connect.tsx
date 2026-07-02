@@ -187,6 +187,7 @@ export default function Connect() {
                 <a href={`mailto:${brand.email}`} className="text-red-400 hover:text-red-300 transition-colors text-sm underline underline-offset-2">
                   {brand.email}
                 </a>
+                <p className="text-[11px] uppercase tracking-widest text-cream/35 mt-3">{brand.responseTime}</p>
               </div>
             </div>
           </motion.div>
