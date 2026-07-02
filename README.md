@@ -2,6 +2,17 @@
 
 The website for [rubbersuccubus.com](https://rubbersuccubus.com) — a React + Vite static single-page app with the Obsidian Silk dark-luxury design. Pages: Home, Services, Portfolio, FAQ, Events, Connect, Checkout, behind an 18+ age gate.
 
+## Launch status
+
+**The site is live at [rubbbersuccubus.netlify.app](https://rubbbersuccubus.netlify.app)** — every push to `main` redeploys it automatically. Remaining steps, all yours (each takes minutes; details below):
+
+- [ ] **Custom domain**: in Netlify → Site settings → Domain management, add `rubbersuccubus.com`, then point your registrar's DNS at Netlify. (Or use GitHub Pages instead: Settings → Pages → Source → "GitHub Actions" — the workflow and CNAME are already in place.)
+- [ ] **Prices & content**: replace the `[Add your pricing]` placeholders and event TBDs in `client/src/config/site.ts`.
+- [ ] **Gallery photos**: the Portfolio page shows placeholders until real images are wired in.
+- [ ] **Integrations** (optional, forms fall back to email until then): Stripe, Formspree, Mailchimp, Google Calendar — see below.
+- [ ] **Engagement extras** (optional): announcement/countdown banner and testimonials — see below.
+- [ ] Optional: rename the Netlify site (it's currently spelled with three b's).
+
 ## Development
 
 ```bash
@@ -23,6 +34,8 @@ pnpm preview   # serve the production build locally
 | Upcoming events | `upcomingEvents` |
 | Gallery placeholders | `galleryItems` |
 | Social media links (set `live: true` + real URL to activate a tile) | `socialLinks` |
+| Announcement/countdown banner (set `message`, optional `targetDate`) | `announcement` |
+| Fan/client testimonials on Home (section hidden while empty) | `testimonials` |
 | Stripe / Formspree / Mailchimp / Google Calendar | `integrations` |
 
 Pages contain layout only — you shouldn't need to touch them for content updates.
