@@ -3,7 +3,7 @@ import { Calendar, MapPin, Clock, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
-import { brand, integrations, isConfigured, upcomingEvents } from "@/config/site";
+import { brand, integrations, isConfigured, themedDays, upcomingEvents } from "@/config/site";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 const isCalendarConfigured = isConfigured(integrations.googleCalendarEmbedSrc);
@@ -30,6 +30,26 @@ export default function Events() {
               Stay in the loop on where I'll be and what's coming next.
             </p>
           </motion.div>
+
+          {/* Themed days — hidden until entries exist in site.ts */}
+          {themedDays.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05, duration: 0.4 }}
+              className="mb-14 flex flex-wrap gap-3"
+            >
+              {themedDays.map((themed) => (
+                <div
+                  key={themed.day}
+                  className="px-4 py-2 border border-red-900/30 bg-black/30 rounded-sm"
+                >
+                  <span className="text-[10px] uppercase tracking-widest text-cream/40 block">{themed.day}</span>
+                  <span className="font-serif italic text-sm text-red-300">{themed.theme}</span>
+                </div>
+              ))}
+            </motion.div>
+          )}
 
           {/* Google Calendar Embed */}
           <motion.div

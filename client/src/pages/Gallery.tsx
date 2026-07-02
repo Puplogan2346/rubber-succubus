@@ -1,15 +1,37 @@
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { Image, Play, ExternalLink } from "lucide-react";
+import { Image, Play, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { galleryItems } from "@/config/site";
+import StickyBookCTA from "@/components/StickyBookCTA";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Gallery() {
   usePageMeta({ title: "Portfolio", description: "A showcase of photography, videography, and custom content celebrating rubber, latex, and gimp aesthetics." });
   const [, navigate] = useLocation();
+
+  // Real photos only — the lightbox navigates within these
+  const photos = galleryItems.filter((item) => item.type === "photo" && item.src);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxIndex(null);
+      if (e.key === "ArrowRight") setLightboxIndex((i) => (i === null ? i : (i + 1) % photos.length));
+      if (e.key === "ArrowLeft") setLightboxIndex((i) => (i === null ? i : (i - 1 + photos.length) % photos.length));
+    };
+    document.addEventListener("keydown", onKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [lightboxIndex, photos.length]);
 
   return (
     <PageWrapper>
@@ -100,6 +122,15 @@ export default function Gallery() {
                     >
                       {tile}
                     </a>
+                  ) : item.type === "photo" && item.src ? (
+                    <button
+                      type="button"
+                      onClick={() => setLightboxIndex(photos.findIndex((photo) => photo.id === item.id))}
+                      aria-label={`View ${item.alt ?? "photo"} full size`}
+                      className="block w-full text-left"
+                    >
+                      {tile}
+                    </button>
                   ) : (
                     tile
                   )}
@@ -162,6 +193,69 @@ export default function Gallery() {
         </div>
       </div>
 
+      {/* Lightbox */}
+      {lightboxIndex !== null && photos[lightboxIndex] && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={photos[lightboxIndex].alt ?? "Photo"}
+          className="fixed inset-0 z-[60] bg-black/95 flex items-center justify-center p-4 md:p-10"
+          onClick={() => setLightboxIndex(null)}
+        >
+          <button
+            type="button"
+            autoFocus
+            onClick={() => setLightboxIndex(null)}
+            aria-label="Close"
+            className="absolute top-4 right-4 p-2 text-cream/60 hover:text-cream transition-colors z-10"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          {photos.length > 1 && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((lightboxIndex - 1 + photos.length) % photos.length);
+              }}
+              aria-label="Previous photo"
+              className="absolute left-2 md:left-6 p-2 text-cream/60 hover:text-cream transition-colors z-10"
+            >
+              <ChevronLeft className="w-8 h-8" />
+            </button>
+          )}
+
+          <figure className="max-w-5xl max-h-full" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={photos[lightboxIndex].src}
+              alt={photos[lightboxIndex].alt ?? ""}
+              className="max-h-[82vh] w-auto mx-auto object-contain rounded-sm border border-red-900/30"
+            />
+            {(photos[lightboxIndex].caption ?? photos[lightboxIndex].alt) && (
+              <figcaption className="text-center text-sm text-cream/60 font-serif italic mt-4">
+                {photos[lightboxIndex].caption ?? photos[lightboxIndex].alt}
+              </figcaption>
+            )}
+          </figure>
+
+          {photos.length > 1 && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setLightboxIndex((lightboxIndex + 1) % photos.length);
+              }}
+              aria-label="Next photo"
+              className="absolute right-2 md:right-6 p-2 text-cream/60 hover:text-cream transition-colors z-10"
+            >
+              <ChevronRight className="w-8 h-8" />
+            </button>
+          )}
+        </div>
+      )}
+
+      <StickyBookCTA />
       <Footer />
     </PageWrapper>
   );

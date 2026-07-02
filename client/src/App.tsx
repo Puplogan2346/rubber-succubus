@@ -13,6 +13,7 @@ const Gallery = lazy(() => import("./pages/Gallery"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Connect = lazy(() => import("./pages/Connect"));
 const Checkout = lazy(() => import("./pages/Checkout"));
+const CustomOrder = lazy(() => import("./pages/CustomOrder"));
 const Events = lazy(() => import("./pages/Events"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -32,6 +33,7 @@ function Router() {
         <Route path={"/faq"} component={FAQ} />
         <Route path={"/connect"} component={Connect} />
         <Route path={"/checkout/:serviceId"} component={Checkout} />
+        <Route path={"/custom-order"} component={CustomOrder} />
         <Route path={"/events"} component={Events} />
         <Route path={"/404"} component={NotFound} />
         {/* Final fallback route */}
