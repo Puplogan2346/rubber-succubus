@@ -3,6 +3,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import BackgroundImage from "./components/BackgroundImage";
+import AgeGate from "./components/AgeGate";
 import Home from "./pages/Home";
 import Services from "./pages/Services";
 import Gallery from "./pages/Gallery";
@@ -35,7 +36,9 @@ function App() {
       <ThemeProvider
         defaultTheme="dark"
       >
-        <Router />
+        <AgeGate>
+          <Router />
+        </AgeGate>
       </ThemeProvider>
     </ErrorBoundary>
   );
