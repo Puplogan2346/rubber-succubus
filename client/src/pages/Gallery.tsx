@@ -32,30 +32,34 @@ export default function Gallery() {
 
           {/* Gallery Grid - Masonry-style with CSS columns */}
           <div className="columns-1 sm:columns-2 md:columns-3 gap-4 mb-16">
-            {galleryItems.map((item, i) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.06, duration: 0.4 }}
-                className="break-inside-avoid mb-4"
-              >
+            {galleryItems.map((item, i) => {
+              const tile = (
                 <div
                   className={`${item.aspect} relative border border-red-900/30 bg-red-950/8 overflow-hidden group cursor-pointer rounded-sm`}
                 >
-                  {/* Placeholder content */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      {item.type === "video" ? (
-                        <Play className="w-8 h-8 text-red-400/30 mx-auto mb-2 group-hover:text-red-400/60 transition-colors" />
-                      ) : (
-                        <Image className="w-8 h-8 text-red-400/30 mx-auto mb-2 group-hover:text-red-400/60 transition-colors" />
-                      )}
-                      <p className="text-xs text-cream/25 group-hover:text-cream/40 transition-colors">
-                        {item.type === "video" ? "Video" : "Photo"}
-                      </p>
+                  {item.src ? (
+                    /* Real content */
+                    <img
+                      src={item.src}
+                      alt={item.alt ?? ""}
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                  ) : (
+                    /* Placeholder content */
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        {item.type === "video" ? (
+                          <Play className="w-8 h-8 text-red-400/30 mx-auto mb-2 group-hover:text-red-400/60 transition-colors" />
+                        ) : (
+                          <Image className="w-8 h-8 text-red-400/30 mx-auto mb-2 group-hover:text-red-400/60 transition-colors" />
+                        )}
+                        <p className="text-xs text-cream/25 group-hover:text-cream/40 transition-colors">
+                          {item.type === "video" ? "Video" : "Photo"}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Hover overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
@@ -64,7 +68,7 @@ export default function Gallery() {
                         {item.type === "video" ? "Video Content" : "Photography"}
                       </p>
                       <p className="text-sm text-cream/80 font-serif italic">
-                        Add your content here
+                        {item.src ? item.caption ?? item.alt : "Add your content here"}
                       </p>
                     </div>
                   </div>
@@ -76,25 +80,51 @@ export default function Gallery() {
                     </div>
                   )}
                 </div>
-              </motion.div>
-            ))}
+              );
+
+              return (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.06, duration: 0.4 }}
+                  className="break-inside-avoid mb-4"
+                >
+                  {item.type === "video" && item.href ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={item.alt ?? "Watch video"}
+                      className="block"
+                    >
+                      {tile}
+                    </a>
+                  ) : (
+                    tile
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
 
-          {/* Empty state message */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center p-10 border border-dashed border-red-900/30 rounded-sm mb-16"
-          >
-            <Image className="w-10 h-10 text-red-400/40 mx-auto mb-4" />
-            <h3 className="text-xl font-serif italic mb-2 text-cream/70">Gallery Coming Soon</h3>
-            <p className="text-sm text-cream/40 max-w-md mx-auto">
-              Full portfolio with high-resolution photos and videos is being prepared.
-              Follow my socials for the latest drops.
-            </p>
-          </motion.div>
+          {/* Empty state message — hidden once real content exists */}
+          {!galleryItems.some((item) => item.src) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center p-10 border border-dashed border-red-900/30 rounded-sm mb-16"
+            >
+              <Image className="w-10 h-10 text-red-400/40 mx-auto mb-4" />
+              <h3 className="text-xl font-serif italic mb-2 text-cream/70">Gallery Coming Soon</h3>
+              <p className="text-sm text-cream/40 max-w-md mx-auto">
+                Full portfolio with high-resolution photos and videos is being prepared.
+                Follow my socials for the latest drops.
+              </p>
+            </motion.div>
+          )}
 
           {/* CTA */}
           <motion.div

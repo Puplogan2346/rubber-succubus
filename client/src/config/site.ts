@@ -225,12 +225,25 @@ export const upcomingEvents: EventItem[] = [
 ];
 
 // ─── GALLERY ──────────────────────────────────────────────────────────────────
+// To show real work: drop an image into client/public/gallery/ and set `src`
+// on an entry (e.g. src: "/gallery/my-shot.webp") plus a short `alt`
+// description. Entries without `src` render as placeholder tiles. For video
+// items, `src` is a poster/thumbnail image and `href` links out to wherever
+// the clip is hosted.
 
 export interface GalleryItem {
   id: number;
   type: "photo" | "video";
   /** Tailwind aspect-ratio class controlling the masonry tile shape */
   aspect: string;
+  /** Image path under client/public, e.g. "/gallery/shot-01.webp" */
+  src?: string;
+  /** Short description of the image for screen readers */
+  alt?: string;
+  /** Optional caption shown in the hover overlay */
+  caption?: string;
+  /** Video items only: external link to watch the clip */
+  href?: string;
 }
 
 export const galleryItems: GalleryItem[] = [
