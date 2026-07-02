@@ -11,8 +11,13 @@
 
 /* Smooth scrolling for all navigation and anchor links */
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: 80px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @custom-variant dark (&:is(.dark *));

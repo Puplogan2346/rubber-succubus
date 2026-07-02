@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { useLocation } from "wouter";
-import { ChevronDown, MessageCircle } from "lucide-react";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { MessageCircle } from "lucide-react";
+import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { faqItems } from "@/config/site";
 
 export default function FAQ() {
   const [, navigate] = useLocation();
-  const [openId, setOpenId] = useState<string | null>(null);
 
   return (
     <PageWrapper>
@@ -30,55 +34,32 @@ export default function FAQ() {
           </motion.div>
 
           {/* FAQ Accordion */}
-          <div className="space-y-3">
+          <Accordion type="single" collapsible className="space-y-3">
             {faqItems.map((faq, i) => (
               <motion.div
                 key={faq.id}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06, duration: 0.3 }}
-                className={`border rounded-sm overflow-hidden transition-colors ${
-                  openId === faq.id
-                    ? "border-red-700/50 bg-red-950/10"
-                    : "border-red-900/25 bg-black/30 hover:border-red-900/50"
-                }`}
               >
-                <button
-                  onClick={() => setOpenId(openId === faq.id ? null : faq.id)}
-                  className="w-full p-5 md:p-6 flex items-center justify-between text-left group"
+                <AccordionItem
+                  value={faq.id}
+                  className="border last:border-b border-red-900/25 bg-black/30 hover:border-red-900/50 data-[state=open]:border-red-700/50 data-[state=open]:bg-red-950/10 rounded-sm overflow-hidden transition-colors"
                 >
-                  <h3 className="font-serif italic text-base md:text-lg pr-4 group-hover:text-red-300 transition-colors">
-                    {faq.question}
-                  </h3>
-                  <motion.div
-                    animate={{ rotate: openId === faq.id ? 180 : 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="flex-shrink-0"
-                  >
-                    <ChevronDown className="w-5 h-5 text-red-400/70" />
-                  </motion.div>
-                </button>
-
-                <AnimatePresence>
-                  {openId === faq.id && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.25, ease: "easeInOut" }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-5 md:px-6 pb-5 md:pb-6 border-t border-red-900/20 pt-4">
-                        <p className="text-cream/65 text-sm md:text-base leading-relaxed font-light">
-                          {faq.answer}
-                        </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                  <AccordionTrigger className="group w-full p-5 md:p-6 items-center hover:no-underline rounded-none [&>svg]:size-5 [&>svg]:text-red-400/70 [&>svg]:translate-y-0">
+                    <h3 className="font-serif italic text-base md:text-lg pr-4 group-hover:text-red-300 transition-colors">
+                      {faq.question}
+                    </h3>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-5 md:px-6 pb-5 md:pb-6 pt-4 border-t border-red-900/20">
+                    <p className="text-cream/65 text-sm md:text-base leading-relaxed font-light">
+                      {faq.answer}
+                    </p>
+                  </AccordionContent>
+                </AccordionItem>
               </motion.div>
             ))}
-          </div>
+          </Accordion>
 
           {/* Contact CTA */}
           <motion.div

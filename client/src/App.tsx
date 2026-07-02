@@ -1,4 +1,5 @@
 import { lazy, Suspense } from "react";
+import { MotionConfig } from "framer-motion";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -47,10 +48,12 @@ function App() {
       <ThemeProvider
         defaultTheme="dark"
       >
-        <ScrollToTop />
-        <AgeGate>
-          <Router />
-        </AgeGate>
+        <MotionConfig reducedMotion="user">
+          <ScrollToTop />
+          <AgeGate>
+            <Router />
+          </AgeGate>
+        </MotionConfig>
       </ThemeProvider>
     </ErrorBoundary>
   );

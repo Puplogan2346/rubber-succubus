@@ -143,6 +143,8 @@ export default function Connect() {
                   href={social.live ? social.url : undefined}
                   target={social.live ? "_blank" : undefined}
                   rel="noopener noreferrer"
+                  aria-disabled={social.live ? undefined : true}
+                  tabIndex={social.live ? undefined : -1}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 + i * 0.04, duration: 0.3 }}
@@ -150,9 +152,8 @@ export default function Connect() {
                   className={`p-5 border bg-black/30 transition-all block rounded-sm ${
                     social.live
                       ? "border-red-900/30 hover:bg-red-950/15 cursor-pointer"
-                      : "border-red-900/15 opacity-40 cursor-not-allowed"
+                      : "border-red-900/15 opacity-40 cursor-not-allowed pointer-events-none"
                   }`}
-                  onClick={(e) => { if (!social.live) e.preventDefault(); }}
                 >
                   <div className="text-3xl mb-2">{social.emoji}</div>
                   <h3 className="font-serif italic text-sm md:text-base mb-0.5">{social.name}</h3>
