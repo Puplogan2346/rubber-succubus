@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { socialLinks } from "@/config/socialLinks";
+import { brand, primarySocials } from "@/config/site";
+
+const navSocials = primarySocials.filter((social) => social.icon);
 
 const navItems = [
   { label: "Services", path: "/services" },
@@ -34,7 +36,7 @@ export default function Navigation() {
               <span className="text-lg font-serif italic text-red-200">R</span>
             </div>
             <span className="text-xl font-serif italic text-cream/90 hidden sm:block group-hover:text-cream transition-colors">
-              Rubber Succubus
+              {brand.name}
             </span>
           </button>
 
@@ -57,15 +59,15 @@ export default function Navigation() {
 
           {/* Desktop Social Links */}
           <div className="hidden md:flex items-center gap-3">
-            {socialLinks.map((social) => {
-              const IconComponent = social.icon;
+            {navSocials.map((social) => {
+              const IconComponent = social.icon!;
               return (
                 <a
                   key={social.name}
                   href={social.url}
                   target={social.name !== "Email" ? "_blank" : undefined}
                   rel={social.name !== "Email" ? "noopener noreferrer" : undefined}
-                  title={social.label}
+                  title={social.name}
                   className="p-2 text-cream/60 hover:text-red-400 transition-colors duration-300 social-icon"
                 >
                   <IconComponent className="w-5 h-5" />
@@ -127,15 +129,15 @@ export default function Navigation() {
                   Follow
                 </p>
                 <div className="flex gap-4">
-                  {socialLinks.map((social) => {
-                    const IconComponent = social.icon;
+                  {navSocials.map((social) => {
+                    const IconComponent = social.icon!;
                     return (
                       <a
                         key={social.name}
                         href={social.url}
                         target={social.name !== "Email" ? "_blank" : undefined}
                         rel={social.name !== "Email" ? "noopener noreferrer" : undefined}
-                        title={social.label}
+                        title={social.name}
                         className="p-3 text-cream/60 hover:text-red-400 hover:bg-red-950/30 rounded transition-colors duration-300 social-icon"
                       >
                         <IconComponent className="w-6 h-6" />

@@ -4,22 +4,10 @@ import { Image, Play, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
+import { galleryItems } from "@/config/site";
 
 export default function Gallery() {
   const [, navigate] = useLocation();
-
-  // Placeholder items with varying aspect ratios for visual interest
-  const galleryItems = [
-    { id: 1, type: "photo", aspect: "aspect-[3/4]" },
-    { id: 2, type: "photo", aspect: "aspect-square" },
-    { id: 3, type: "video", aspect: "aspect-[4/3]" },
-    { id: 4, type: "photo", aspect: "aspect-[3/4]" },
-    { id: 5, type: "photo", aspect: "aspect-square" },
-    { id: 6, type: "video", aspect: "aspect-[3/4]" },
-    { id: 7, type: "photo", aspect: "aspect-square" },
-    { id: 8, type: "photo", aspect: "aspect-[4/3]" },
-    { id: 9, type: "photo", aspect: "aspect-square" },
-  ];
 
   return (
     <PageWrapper>

@@ -5,11 +5,7 @@ import { Mail, ExternalLink, Send, CheckCircle, AlertCircle, Loader } from "luci
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
-
-// ─── CONFIGURATION ────────────────────────────────────────────────────────────
-const FORMSPREE_FORM_ID = "YOUR_FORMSPREE_FORM_ID";
-const MAILCHIMP_ACTION_URL = "YOUR_MAILCHIMP_ACTION_URL";
-// ─────────────────────────────────────────────────────────────────────────────
+import { brand, integrations, isConfigured, socialLinks } from "@/config/site";
 
 interface ContactFormErrors {
   name?: string;
@@ -32,18 +28,6 @@ export default function Connect() {
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [newsletterErrors, setNewsletterErrors] = useState<NewsletterErrors>({});
-
-  const socials = [
-    { name: "Twitter / X", handle: "@Rubber_Succubus", url: "https://x.com/rubber_succubus", icon: "𝕏", live: true },
-    { name: "Telegram", handle: "@Rubber_Succubus", url: "https://t.me/rubber_succubus", icon: "✈️", live: true },
-    { name: "Linktree", handle: "Rubber_Succubus", url: "https://linktr.ee/Rubber_Succubus", icon: "🔗", live: true },
-    { name: "Instagram", handle: "[Coming soon]", url: "#", icon: "📷", live: false },
-    { name: "FetLife", handle: "[Coming soon]", url: "#", icon: "🖤", live: false },
-    { name: "OnlyFans", handle: "[Coming soon]", url: "#", icon: "🔞", live: false },
-    { name: "Throne Wishlist", handle: "[Coming soon]", url: "#", icon: "👑", live: false },
-    { name: "Reddit", handle: "[Coming soon]", url: "#", icon: "🤖", live: false },
-    { name: "Bluesky", handle: "[Coming soon]", url: "#", icon: "🦋", live: false },
-  ];
 
   // Validate contact form
   const validateContactForm = (): boolean => {
@@ -98,16 +82,16 @@ export default function Connect() {
       return;
     }
 
-    if (FORMSPREE_FORM_ID === "YOUR_FORMSPREE_FORM_ID") {
-      const subject = encodeURIComponent(contactForm.subject || "Inquiry from Rubber Succubus site");
+    if (!isConfigured(integrations.formspreeFormId)) {
+      const subject = encodeURIComponent(contactForm.subject || `Inquiry from ${brand.name} site`);
       const body = encodeURIComponent(`Name: ${contactForm.name}\nEmail: ${contactForm.email}\n\n${contactForm.message}`);
-      window.location.href = `mailto:rubbersuccubusbiz@gmail.com?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:${brand.email}?subject=${subject}&body=${body}`;
       return;
     }
 
     setContactStatus("sending");
     try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+      const res = await fetch(`https://formspree.io/f/${integrations.formspreeFormId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(contactForm),
@@ -132,8 +116,8 @@ export default function Connect() {
       return;
     }
 
-    if (MAILCHIMP_ACTION_URL === "YOUR_MAILCHIMP_ACTION_URL") {
-      window.location.href = `mailto:rubbersuccubusbiz@gmail.com?subject=Newsletter%20Signup&body=Please%20add%20me%20to%20your%20newsletter%3A%20${encodeURIComponent(newsletterEmail)}`;
+    if (!isConfigured(integrations.mailchimpActionUrl)) {
+      window.location.href = `mailto:${brand.email}?subject=Newsletter%20Signup&body=Please%20add%20me%20to%20your%20newsletter%3A%20${encodeURIComponent(newsletterEmail)}`;
       return;
     }
 
@@ -141,7 +125,7 @@ export default function Connect() {
     try {
       const formData = new FormData();
       formData.append("EMAIL", newsletterEmail);
-      await fetch(MAILCHIMP_ACTION_URL, { method: "POST", body: formData, mode: "no-cors" });
+      await fetch(integrations.mailchimpActionUrl, { method: "POST", body: formData, mode: "no-cors" });
       setNewsletterStatus("success");
       setNewsletterEmail("");
       setNewsletterErrors({});
@@ -177,7 +161,7 @@ export default function Connect() {
             className="mb-16"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-              {socials.map((social, i) => (
+              {socialLinks.map((social, i) => (
                 <motion.a
                   key={i}
                   href={social.live ? social.url : undefined}
@@ -194,7 +178,7 @@ export default function Connect() {
                   }`}
                   onClick={(e) => { if (!social.live) e.preventDefault(); }}
                 >
-                  <div className="text-3xl mb-2">{social.icon}</div>
+                  <div className="text-3xl mb-2">{social.emoji}</div>
                   <h3 className="font-serif italic text-sm md:text-base mb-0.5">{social.name}</h3>
                   <p className="text-xs text-cream/45">{social.handle}</p>
                   {social.live && (
@@ -221,8 +205,8 @@ export default function Connect() {
               <div>
                 <h3 className="font-serif italic text-lg mb-1">Email</h3>
                 <p className="text-cream/50 text-sm mb-3 font-light">For custom orders, inquiries, or just to chat:</p>
-                <a href="mailto:rubbersuccubusbiz@gmail.com" className="text-red-400 hover:text-red-300 transition-colors text-sm underline underline-offset-2">
-                  rubbersuccubusbiz@gmail.com
+                <a href={`mailto:${brand.email}`} className="text-red-400 hover:text-red-300 transition-colors text-sm underline underline-offset-2">
+                  {brand.email}
                 </a>
               </div>
             </div>

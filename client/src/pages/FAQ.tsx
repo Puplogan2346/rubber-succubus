@@ -5,48 +5,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
+import { faqItems } from "@/config/site";
 
 export default function FAQ() {
   const [, navigate] = useLocation();
   const [openId, setOpenId] = useState<string | null>(null);
-
-  const faqs = [
-    {
-      id: "pricing",
-      q: "How much do your services cost?",
-      a: "Photography starts at a per-hour rate, videography packages range depending on scope, and custom orders are quoted individually. Reach out for a detailed quote tailored to your vision.",
-    },
-    {
-      id: "turnaround",
-      q: "What's your turnaround time?",
-      a: "Standard turnaround is 2-3 weeks for editing and delivery. Rush orders are available for an additional fee. I'll always give you a clear timeline before we start.",
-    },
-    {
-      id: "payment",
-      q: "What payment methods do you accept?",
-      a: "I accept payments through Stripe (cards), PayPal, and bank transfer. A 50% deposit is required to book your session, with the balance due before final delivery.",
-    },
-    {
-      id: "boundaries",
-      q: "Do you have any content boundaries?",
-      a: "I work within the rubber, latex, and gimp aesthetic. Specific limits and hard boundaries can be discussed during our initial consultation. Communication and consent are always the priority.",
-    },
-    {
-      id: "custom",
-      q: "Can you do custom requests?",
-      a: "Absolutely. Custom orders are my specialty. Let's chat about your vision and I'll put together a quote that works for both of us. The weirder, the better.",
-    },
-    {
-      id: "revisions",
-      q: "What's your revision policy?",
-      a: "Up to 2 rounds of revisions are included with every order. Additional revisions are available at a per-round fee. I want you to be thrilled with the final result.",
-    },
-    {
-      id: "privacy",
-      q: "Will my order remain private?",
-      a: "100% confidential. I never share client content without explicit written permission. Your privacy and discretion are non-negotiable.",
-    },
-  ];
 
   return (
     <PageWrapper>
@@ -68,7 +31,7 @@ export default function FAQ() {
 
           {/* FAQ Accordion */}
           <div className="space-y-3">
-            {faqs.map((faq, i) => (
+            {faqItems.map((faq, i) => (
               <motion.div
                 key={faq.id}
                 initial={{ opacity: 0, y: 15 }}
@@ -85,7 +48,7 @@ export default function FAQ() {
                   className="w-full p-5 md:p-6 flex items-center justify-between text-left group"
                 >
                   <h3 className="font-serif italic text-base md:text-lg pr-4 group-hover:text-red-300 transition-colors">
-                    {faq.q}
+                    {faq.question}
                   </h3>
                   <motion.div
                     animate={{ rotate: openId === faq.id ? 180 : 0 }}
@@ -107,7 +70,7 @@ export default function FAQ() {
                     >
                       <div className="px-5 md:px-6 pb-5 md:pb-6 border-t border-red-900/20 pt-4">
                         <p className="text-cream/65 text-sm md:text-base leading-relaxed font-light">
-                          {faq.a}
+                          {faq.answer}
                         </p>
                       </div>
                     </motion.div>

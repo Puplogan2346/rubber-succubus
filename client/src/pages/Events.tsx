@@ -3,41 +3,9 @@ import { Calendar, MapPin, Clock, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
+import { brand, integrations, isConfigured, upcomingEvents } from "@/config/site";
 
-// ─── GOOGLE CALENDAR CONFIGURATION ───────────────────────────────────────────
-const GOOGLE_CALENDAR_EMBED_SRC = "YOUR_GOOGLE_CALENDAR_EMBED_SRC";
-const isCalendarConfigured = GOOGLE_CALENDAR_EMBED_SRC !== "YOUR_GOOGLE_CALENDAR_EMBED_SRC";
-
-// Upcoming events
-const upcomingEvents = [
-  {
-    title: "[Event Name]",
-    date: "[Date TBD]",
-    time: "[Time TBD]",
-    location: "San Francisco, CA",
-    description: "Details coming soon. Follow socials for announcements.",
-    link: "#",
-    live: false,
-  },
-  {
-    title: "[Shoot / Collab]",
-    date: "[Date TBD]",
-    time: "[Time TBD]",
-    location: "San Francisco, CA",
-    description: "Collaborative session details to be announced.",
-    link: "#",
-    live: false,
-  },
-  {
-    title: "[Pop-up / Appearance]",
-    date: "[Date TBD]",
-    time: "[Time TBD]",
-    location: "[Venue TBD]",
-    description: "Venue and appearance details coming soon.",
-    link: "#",
-    live: false,
-  },
-];
+const isCalendarConfigured = isConfigured(integrations.googleCalendarEmbedSrc);
 
 export default function Events() {
   const [, navigate] = useLocation();
@@ -78,7 +46,7 @@ export default function Events() {
             {isCalendarConfigured ? (
               <div className="border border-red-900/30 overflow-hidden rounded-sm">
                 <iframe
-                  src={GOOGLE_CALENDAR_EMBED_SRC}
+                  src={integrations.googleCalendarEmbedSrc}
                   style={{ border: 0 }}
                   width="100%"
                   height="500"
@@ -171,14 +139,14 @@ export default function Events() {
               Follow me on Twitter/X for real-time updates on events, shoots, and exclusive content.
             </p>
             <motion.a
-              href="https://x.com/rubber_succubus"
+              href={brand.twitterUrl}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               className="inline-flex items-center gap-2 btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold transition-all rounded-sm"
             >
-              Follow @Rubber_Succubus
+              Follow {brand.handle}
               <ExternalLink className="w-4 h-4" />
             </motion.a>
           </motion.div>

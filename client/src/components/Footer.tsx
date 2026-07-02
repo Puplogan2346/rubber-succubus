@@ -1,4 +1,5 @@
 import { useLocation } from "wouter";
+import { brand } from "@/config/site";
 
 const footerLinks = [
   { label: "Services", path: "/services" },
@@ -21,10 +22,10 @@ export default function Footer() {
               <div className="w-8 h-8 bg-gradient-to-br from-red-800 to-red-950 rounded-full flex items-center justify-center border border-red-700/60">
                 <span className="text-sm font-serif italic text-red-200">R</span>
               </div>
-              <span className="text-lg font-serif italic text-cream/90">Rubber Succubus</span>
+              <span className="text-lg font-serif italic text-cream/90">{brand.name}</span>
             </div>
             <p className="text-sm text-cream/50 leading-relaxed">
-              Rubber, latex, and gimp aesthetics crafted with intention. Based in San Francisco.
+              {brand.tagline}
             </p>
           </div>
 
@@ -52,18 +53,18 @@ export default function Footer() {
               Get in Touch
             </h4>
             <a
-              href="mailto:rubbersuccubusbiz@gmail.com"
+              href={`mailto:${brand.email}`}
               className="text-sm text-cream/50 hover:text-cream transition-colors block mb-2"
             >
-              rubbersuccubusbiz@gmail.com
+              {brand.email}
             </a>
             <a
-              href="https://x.com/rubber_succubus"
+              href={brand.twitterUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-cream/50 hover:text-cream transition-colors block"
             >
-              @Rubber_Succubus on X
+              {brand.handle} on X
             </a>
           </div>
         </div>
@@ -71,7 +72,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-red-900/20 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs text-cream/40">
-            &copy; 2026 Rubber Succubus. All rights reserved.
+            &copy; {new Date().getFullYear()} {brand.name}. All rights reserved.
           </p>
           <p className="text-xs text-cream/30">
             18+ Adult Content. By using this site, you confirm you are of legal age.

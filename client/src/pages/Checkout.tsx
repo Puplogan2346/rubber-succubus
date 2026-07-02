@@ -4,15 +4,7 @@ import { ShieldCheck, CreditCard, ExternalLink, ArrowLeft, Check, AlertCircle, L
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
-
-// ─── STRIPE CONFIGURATION ────────────────────────────────────────────────────
-const STRIPE_PAYMENT_LINKS: Record<string, string> = {
-  photography: "YOUR_STRIPE_PAYMENT_LINK_PHOTOGRAPHY",
-  videography: "YOUR_STRIPE_PAYMENT_LINK_VIDEOGRAPHY",
-  "social-content": "YOUR_STRIPE_PAYMENT_LINK_SOCIAL",
-  "custom-order": "YOUR_STRIPE_PAYMENT_LINK_CUSTOM",
-};
-// ─────────────────────────────────────────────────────────────────────────────
+import { brand, getService, integrations, isConfigured } from "@/config/site";
 
 interface FormErrors {
   name?: string;
@@ -33,36 +25,9 @@ export default function Checkout() {
 
   const serviceId = params?.serviceId || "custom-order";
 
-  const services: Record<string, { title: string; price: string; description: string; emoji: string }> = {
-    photography: {
-      title: "Photography Session",
-      price: "[Add your price]",
-      description: "Custom photo shoot with rubber/latex/gimp aesthetic",
-      emoji: "📸",
-    },
-    videography: {
-      title: "Videography Package",
-      price: "[Add your price]",
-      description: "Professional video content creation",
-      emoji: "🎬",
-    },
-    "social-content": {
-      title: "Social Media Content",
-      price: "[Add your price]",
-      description: "Curated content for your favorite platforms",
-      emoji: "📱",
-    },
-    "custom-order": {
-      title: "Custom Order",
-      price: "Quote on request",
-      description: "Bespoke content creation tailored to your vision",
-      emoji: "✨",
-    },
-  };
-
-  const service = services[serviceId] || services["custom-order"];
-  const stripeLink = STRIPE_PAYMENT_LINKS[serviceId];
-  const isStripeConfigured = stripeLink && !stripeLink.startsWith("YOUR_STRIPE");
+  const service = getService(serviceId);
+  const stripeLink = integrations.stripePaymentLinks[service.id];
+  const isStripeConfigured = isConfigured(stripeLink);
 
   // Validation function
   const validateForm = (): boolean => {
@@ -109,11 +74,11 @@ export default function Checkout() {
         }, 3000);
       } else {
         // Fallback to email
-        const subject = encodeURIComponent(`Booking Inquiry: ${service.title}`);
+        const subject = encodeURIComponent(`Booking Inquiry: ${service.checkoutTitle}`);
         const body = encodeURIComponent(
-          `Name: ${form.name}\nEmail: ${form.email}\nService: ${service.title}\n\nProject Details:\n${form.details}`
+          `Name: ${form.name}\nEmail: ${form.email}\nService: ${service.checkoutTitle}\n\nProject Details:\n${form.details}`
         );
-        window.location.href = `mailto:rubbersuccubusbiz@gmail.com?subject=${subject}&body=${body}`;
+        window.location.href = `mailto:${brand.email}?subject=${subject}&body=${body}`;
       }
     } catch (error) {
       setSubmitError("Failed to process payment. Please try again.");
@@ -176,12 +141,12 @@ export default function Checkout() {
                 {service.emoji}
               </div>
               <div className="flex-1">
-                <h2 className="text-lg font-serif italic">{service.title}</h2>
-                <p className="text-cream/45 text-xs mt-0.5">{service.description}</p>
+                <h2 className="text-lg font-serif italic">{service.checkoutTitle}</h2>
+                <p className="text-cream/45 text-xs mt-0.5">{service.checkoutDescription}</p>
               </div>
               <div className="text-right">
                 <p className="text-[10px] uppercase tracking-widest text-cream/35">Starting at</p>
-                <p className="text-lg font-serif italic text-red-400">{service.price}</p>
+                <p className="text-lg font-serif italic text-red-400">{service.checkoutPrice}</p>
               </div>
             </div>
           </motion.div>
@@ -338,7 +303,7 @@ export default function Checkout() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-cream/45">Service</span>
-                    <span className="text-cream/90 font-medium">{service.title}</span>
+                    <span className="text-cream/90 font-medium">{service.checkoutTitle}</span>
                   </div>
                   {form.details && (
                     <div className="border-t border-red-900/15 pt-3">
