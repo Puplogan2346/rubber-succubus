@@ -1,3 +1,9 @@
 [build]
   command = "pnpm install --no-frozen-lockfile && pnpm run build"
-  publish = "dist"
+  publish = "dist/public"
+
+# SPA fallback: serve index.html for all client-side routes.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

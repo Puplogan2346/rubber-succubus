@@ -5,11 +5,9 @@ import { Mail, ExternalLink, Send, CheckCircle, AlertCircle, Loader } from "luci
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
-
-// ─── CONFIGURATION ────────────────────────────────────────────────────────────
-const FORMSPREE_FORM_ID = "YOUR_FORMSPREE_FORM_ID";
-const MAILCHIMP_ACTION_URL = "YOUR_MAILCHIMP_ACTION_URL";
-// ─────────────────────────────────────────────────────────────────────────────
+import { brand, integrations, isConfigured, socialLinks } from "@/config/site";
+import { emailError, requiredText } from "@/lib/validation";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 interface ContactFormErrors {
   name?: string;
@@ -23,6 +21,7 @@ interface NewsletterErrors {
 }
 
 export default function Connect() {
+  usePageMeta({ title: "Connect", description: "All socials, contact form, and newsletter signup." });
   const [, navigate] = useLocation();
 
   const [contactForm, setContactForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -33,62 +32,25 @@ export default function Connect() {
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [newsletterErrors, setNewsletterErrors] = useState<NewsletterErrors>({});
 
-  const socials = [
-    { name: "Twitter / X", handle: "@Rubber_Succubus", url: "https://x.com/rubber_succubus", icon: "𝕏", live: true },
-    { name: "Telegram", handle: "@Rubber_Succubus", url: "https://t.me/rubber_succubus", icon: "✈️", live: true },
-    { name: "Linktree", handle: "Rubber_Succubus", url: "https://linktr.ee/Rubber_Succubus", icon: "🔗", live: true },
-    { name: "Instagram", handle: "[Coming soon]", url: "#", icon: "📷", live: false },
-    { name: "FetLife", handle: "[Coming soon]", url: "#", icon: "🖤", live: false },
-    { name: "OnlyFans", handle: "[Coming soon]", url: "#", icon: "🔞", live: false },
-    { name: "Throne Wishlist", handle: "[Coming soon]", url: "#", icon: "👑", live: false },
-    { name: "Reddit", handle: "[Coming soon]", url: "#", icon: "🤖", live: false },
-    { name: "Bluesky", handle: "[Coming soon]", url: "#", icon: "🦋", live: false },
-  ];
-
   // Validate contact form
   const validateContactForm = (): boolean => {
-    const newErrors: ContactFormErrors = {};
-
-    if (!contactForm.name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (contactForm.name.trim().length < 2) {
-      newErrors.name = "Name must be at least 2 characters";
-    }
-
-    if (!contactForm.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
-
-    if (!contactForm.subject.trim()) {
-      newErrors.subject = "Subject is required";
-    } else if (contactForm.subject.trim().length < 3) {
-      newErrors.subject = "Subject must be at least 3 characters";
-    }
-
-    if (!contactForm.message.trim()) {
-      newErrors.message = "Message is required";
-    } else if (contactForm.message.trim().length < 10) {
-      newErrors.message = "Message must be at least 10 characters";
-    }
+    const newErrors: ContactFormErrors = {
+      name: requiredText(contactForm.name, "Name", 2),
+      email: emailError(contactForm.email),
+      subject: requiredText(contactForm.subject, "Subject", 3),
+      message: requiredText(contactForm.message, "Message", 10),
+    };
 
     setContactErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.values(newErrors).every((error) => !error);
   };
 
   // Validate newsletter email
   const validateNewsletterEmail = (): boolean => {
-    const newErrors: NewsletterErrors = {};
-
-    if (!newsletterEmail.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletterEmail)) {
-      newErrors.email = "Please enter a valid email address";
-    }
+    const newErrors: NewsletterErrors = { email: emailError(newsletterEmail) };
 
     setNewsletterErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return !newErrors.email;
   };
 
   const handleContactSubmit = async (e: React.FormEvent) => {
@@ -98,16 +60,16 @@ export default function Connect() {
       return;
     }
 
-    if (FORMSPREE_FORM_ID === "YOUR_FORMSPREE_FORM_ID") {
-      const subject = encodeURIComponent(contactForm.subject || "Inquiry from Rubber Succubus site");
+    if (!isConfigured(integrations.formspreeFormId)) {
+      const subject = encodeURIComponent(contactForm.subject || `Inquiry from ${brand.name} site`);
       const body = encodeURIComponent(`Name: ${contactForm.name}\nEmail: ${contactForm.email}\n\n${contactForm.message}`);
-      window.location.href = `mailto:rubbersuccubusbiz@gmail.com?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:${brand.email}?subject=${subject}&body=${body}`;
       return;
     }
 
     setContactStatus("sending");
     try {
-      const res = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+      const res = await fetch(`https://formspree.io/f/${integrations.formspreeFormId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify(contactForm),
@@ -132,8 +94,8 @@ export default function Connect() {
       return;
     }
 
-    if (MAILCHIMP_ACTION_URL === "YOUR_MAILCHIMP_ACTION_URL") {
-      window.location.href = `mailto:rubbersuccubusbiz@gmail.com?subject=Newsletter%20Signup&body=Please%20add%20me%20to%20your%20newsletter%3A%20${encodeURIComponent(newsletterEmail)}`;
+    if (!isConfigured(integrations.mailchimpActionUrl)) {
+      window.location.href = `mailto:${brand.email}?subject=Newsletter%20Signup&body=Please%20add%20me%20to%20your%20newsletter%3A%20${encodeURIComponent(newsletterEmail)}`;
       return;
     }
 
@@ -141,7 +103,7 @@ export default function Connect() {
     try {
       const formData = new FormData();
       formData.append("EMAIL", newsletterEmail);
-      await fetch(MAILCHIMP_ACTION_URL, { method: "POST", body: formData, mode: "no-cors" });
+      await fetch(integrations.mailchimpActionUrl, { method: "POST", body: formData, mode: "no-cors" });
       setNewsletterStatus("success");
       setNewsletterEmail("");
       setNewsletterErrors({});
@@ -177,12 +139,14 @@ export default function Connect() {
             className="mb-16"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-              {socials.map((social, i) => (
+              {socialLinks.map((social, i) => (
                 <motion.a
                   key={i}
                   href={social.live ? social.url : undefined}
                   target={social.live ? "_blank" : undefined}
                   rel="noopener noreferrer"
+                  aria-disabled={social.live ? undefined : true}
+                  tabIndex={social.live ? undefined : -1}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 + i * 0.04, duration: 0.3 }}
@@ -190,11 +154,10 @@ export default function Connect() {
                   className={`p-5 border bg-black/30 transition-all block rounded-sm ${
                     social.live
                       ? "border-red-900/30 hover:bg-red-950/15 cursor-pointer"
-                      : "border-red-900/15 opacity-40 cursor-not-allowed"
+                      : "border-red-900/15 opacity-40 cursor-not-allowed pointer-events-none"
                   }`}
-                  onClick={(e) => { if (!social.live) e.preventDefault(); }}
                 >
-                  <div className="text-3xl mb-2">{social.icon}</div>
+                  <div className="text-3xl mb-2">{social.emoji}</div>
                   <h3 className="font-serif italic text-sm md:text-base mb-0.5">{social.name}</h3>
                   <p className="text-xs text-cream/45">{social.handle}</p>
                   {social.live && (
@@ -221,8 +184,8 @@ export default function Connect() {
               <div>
                 <h3 className="font-serif italic text-lg mb-1">Email</h3>
                 <p className="text-cream/50 text-sm mb-3 font-light">For custom orders, inquiries, or just to chat:</p>
-                <a href="mailto:rubbersuccubusbiz@gmail.com" className="text-red-400 hover:text-red-300 transition-colors text-sm underline underline-offset-2">
-                  rubbersuccubusbiz@gmail.com
+                <a href={`mailto:${brand.email}`} className="text-red-400 hover:text-red-300 transition-colors text-sm underline underline-offset-2">
+                  {brand.email}
                 </a>
               </div>
             </div>
@@ -253,11 +216,12 @@ export default function Connect() {
               <form onSubmit={handleContactSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                    <label htmlFor="contact-name" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
                       Name <span className="text-red-400">*</span>
                     </label>
                     <div className="relative">
                       <input
+                        id="contact-name"
                         type="text"
                         value={contactForm.name}
                         onChange={(e) => {
@@ -281,11 +245,12 @@ export default function Connect() {
                     )}
                   </div>
                   <div>
-                    <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                    <label htmlFor="contact-email" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
                       Email <span className="text-red-400">*</span>
                     </label>
                     <div className="relative">
                       <input
+                        id="contact-email"
                         type="email"
                         value={contactForm.email}
                         onChange={(e) => {
@@ -310,11 +275,12 @@ export default function Connect() {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                  <label htmlFor="contact-subject" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
                     Subject <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
                     <input
+                      id="contact-subject"
                       type="text"
                       value={contactForm.subject}
                       onChange={(e) => {
@@ -338,11 +304,12 @@ export default function Connect() {
                   )}
                 </div>
                 <div>
-                  <label className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
+                  <label htmlFor="contact-message" className="block text-[10px] uppercase tracking-widest text-cream/40 mb-2">
                     Message <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
                     <textarea
+                      id="contact-message"
                       rows={5}
                       value={contactForm.message}
                       onChange={(e) => {
@@ -419,6 +386,7 @@ export default function Connect() {
                 <div className="relative">
                   <input
                     type="email"
+                    aria-label="Email address for newsletter"
                     value={newsletterEmail}
                     onChange={(e) => {
                       setNewsletterEmail(e.target.value);

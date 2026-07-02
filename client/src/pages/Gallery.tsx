@@ -4,22 +4,12 @@ import { Image, Play, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
+import { galleryItems } from "@/config/site";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Gallery() {
+  usePageMeta({ title: "Portfolio", description: "A showcase of photography, videography, and custom content celebrating rubber, latex, and gimp aesthetics." });
   const [, navigate] = useLocation();
-
-  // Placeholder items with varying aspect ratios for visual interest
-  const galleryItems = [
-    { id: 1, type: "photo", aspect: "aspect-[3/4]" },
-    { id: 2, type: "photo", aspect: "aspect-square" },
-    { id: 3, type: "video", aspect: "aspect-[4/3]" },
-    { id: 4, type: "photo", aspect: "aspect-[3/4]" },
-    { id: 5, type: "photo", aspect: "aspect-square" },
-    { id: 6, type: "video", aspect: "aspect-[3/4]" },
-    { id: 7, type: "photo", aspect: "aspect-square" },
-    { id: 8, type: "photo", aspect: "aspect-[4/3]" },
-    { id: 9, type: "photo", aspect: "aspect-square" },
-  ];
 
   return (
     <PageWrapper>

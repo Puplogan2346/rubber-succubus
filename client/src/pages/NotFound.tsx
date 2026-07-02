@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function NotFound() {
+  usePageMeta({ title: "Page Not Found" });
   const [, navigate] = useLocation();
 
   return (

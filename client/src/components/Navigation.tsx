@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { socialLinks } from "@/config/socialLinks";
+import { brand, primarySocials } from "@/config/site";
+
+const navSocials = primarySocials.filter((social) => social.icon);
 
 const navItems = [
   { label: "Services", path: "/services" },
@@ -15,11 +17,33 @@ const navItems = [
 export default function Navigation() {
   const [location, navigate] = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const handleNavigation = (path: string) => {
     navigate(path);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // While the mobile menu is open: close on Escape, lock body scroll, and
+  // move focus into the menu; focus returns to the toggle on close.
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    menuRef.current?.querySelector<HTMLElement>("button, a")?.focus();
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      toggleRef.current?.focus();
+    };
+  }, [mobileOpen]);
 
   return (
     <>
@@ -34,7 +58,7 @@ export default function Navigation() {
               <span className="text-lg font-serif italic text-red-200">R</span>
             </div>
             <span className="text-xl font-serif italic text-cream/90 hidden sm:block group-hover:text-cream transition-colors">
-              Rubber Succubus
+              {brand.name}
             </span>
           </button>
 
@@ -57,15 +81,15 @@ export default function Navigation() {
 
           {/* Desktop Social Links */}
           <div className="hidden md:flex items-center gap-3">
-            {socialLinks.map((social) => {
-              const IconComponent = social.icon;
+            {navSocials.map((social) => {
+              const IconComponent = social.icon!;
               return (
                 <a
                   key={social.name}
                   href={social.url}
                   target={social.name !== "Email" ? "_blank" : undefined}
                   rel={social.name !== "Email" ? "noopener noreferrer" : undefined}
-                  title={social.label}
+                  title={social.name}
                   className="p-2 text-cream/60 hover:text-red-400 transition-colors duration-300 social-icon"
                 >
                   <IconComponent className="w-5 h-5" />
@@ -76,9 +100,12 @@ export default function Navigation() {
 
           {/* Mobile Menu Toggle */}
           <button
+            ref={toggleRef}
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 hover:bg-red-950/30 rounded transition-colors"
             aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
           >
             {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -89,11 +116,16 @@ export default function Navigation() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
+            ref={menuRef}
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/98 pt-20 px-6"
+            className="fixed inset-0 z-40 bg-black/98 pt-20 px-6 overflow-y-auto"
           >
             <div className="flex flex-col gap-2 max-w-sm mx-auto mt-8">
               {navItems.map((item, i) => (
@@ -127,15 +159,15 @@ export default function Navigation() {
                   Follow
                 </p>
                 <div className="flex gap-4">
-                  {socialLinks.map((social) => {
-                    const IconComponent = social.icon;
+                  {navSocials.map((social) => {
+                    const IconComponent = social.icon!;
                     return (
                       <a
                         key={social.name}
                         href={social.url}
                         target={social.name !== "Email" ? "_blank" : undefined}
                         rel={social.name !== "Email" ? "noopener noreferrer" : undefined}
-                        title={social.label}
+                        title={social.name}
                         className="p-3 text-cream/60 hover:text-red-400 hover:bg-red-950/30 rounded transition-colors duration-300 social-icon"
                       >
                         <IconComponent className="w-6 h-6" />

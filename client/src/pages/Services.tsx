@@ -1,67 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { Camera, Film, Smartphone, Sparkles, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
+import { services } from "@/config/site";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Services() {
+  usePageMeta({ title: "Services", description: "Custom photography, videography, social content, and bespoke orders. Book a session with Rubber Succubus." });
   const [, navigate] = useLocation();
-
-  const services = [
-    {
-      id: "photography",
-      title: "Photography",
-      description: "Custom photo shoots featuring rubber, latex, and gimp aesthetics. Every shot crafted to capture your vision.",
-      price: "[Add your pricing]",
-      icon: Camera,
-      includes: [
-        "Number of edited photos",
-        "Session duration",
-        "Location/studio setup",
-        "Professional retouching",
-      ],
-    },
-    {
-      id: "videography",
-      title: "Videography",
-      description: "Professional video content creation tailored to your vision. From concept to final cut.",
-      price: "[Add your pricing]",
-      icon: Film,
-      includes: [
-        "Video length & format",
-        "Editing & color grading",
-        "Multiple angles",
-        "Delivery in your format",
-      ],
-    },
-    {
-      id: "social-content",
-      title: "Social Media Content",
-      description: "Curated content for Instagram, TikTok, Twitter, and more. Grow your presence with quality.",
-      price: "[Add your pricing]",
-      icon: Smartphone,
-      includes: [
-        "Number of posts/reels",
-        "Content themes & style",
-        "Posting schedule",
-        "Captions & hashtags",
-      ],
-    },
-    {
-      id: "custom-order",
-      title: "Custom Orders",
-      description: "Bespoke content creation. If you can imagine it, let's bring it to life together.",
-      price: "[Contact for quote]",
-      icon: Sparkles,
-      includes: [
-        "Your boundaries & limits",
-        "Turnaround time",
-        "Payment terms",
-        "Revisions included",
-      ],
-    },
-  ];
 
   return (
     <PageWrapper>
