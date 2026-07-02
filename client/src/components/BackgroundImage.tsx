@@ -24,8 +24,6 @@ export default function BackgroundImage() {
       bodyEl.style.backgroundColor = '#000000';
       bodyEl.style.margin = '0';
       bodyEl.style.padding = '0';
-      
-      console.log('Background applied to body and html elements');
     };
     
     // Apply immediately
