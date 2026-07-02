@@ -7,6 +7,7 @@ import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { brand, integrations, isConfigured, socialLinks } from "@/config/site";
 import { emailError, requiredText } from "@/lib/validation";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 interface ContactFormErrors {
   name?: string;
@@ -20,6 +21,7 @@ interface NewsletterErrors {
 }
 
 export default function Connect() {
+  usePageMeta({ title: "Connect", description: "All socials, contact form, and newsletter signup." });
   const [, navigate] = useLocation();
 
   const [contactForm, setContactForm] = useState({ name: "", email: "", subject: "", message: "" });

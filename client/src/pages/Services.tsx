@@ -5,8 +5,10 @@ import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { services } from "@/config/site";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Services() {
+  usePageMeta({ title: "Services", description: "Custom photography, videography, social content, and bespoke orders. Book a session with Rubber Succubus." });
   const [, navigate] = useLocation();
 
   return (

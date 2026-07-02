@@ -4,10 +4,12 @@ import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { brand, integrations, isConfigured, upcomingEvents } from "@/config/site";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const isCalendarConfigured = isConfigured(integrations.googleCalendarEmbedSrc);
 
 export default function Events() {
+  usePageMeta({ title: "Events", description: "Shoots, collabs, and appearances — where to find Rubber Succubus next." });
   const [, navigate] = useLocation();
 
   return (

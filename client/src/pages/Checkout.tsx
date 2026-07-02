@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import { brand, getService, integrations, isConfigured } from "@/config/site";
 import { emailError, requiredText } from "@/lib/validation";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 interface FormErrors {
   name?: string;
@@ -27,6 +28,7 @@ export default function Checkout() {
   const serviceId = params?.serviceId || "custom-order";
 
   const service = getService(serviceId);
+  usePageMeta({ title: `Book ${service.checkoutTitle}` });
   const stripeLink = integrations.stripePaymentLinks[service.id];
   const isStripeConfigured = isConfigured(stripeLink);
 

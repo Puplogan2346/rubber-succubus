@@ -11,8 +11,10 @@ import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { faqItems } from "@/config/site";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function FAQ() {
+  usePageMeta({ title: "FAQ", description: "Answers about pricing, turnaround, payment, boundaries, revisions, and privacy." });
   const [, navigate] = useLocation();
 
   return (

@@ -5,8 +5,10 @@ import { motion } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { galleryItems } from "@/config/site";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Gallery() {
+  usePageMeta({ title: "Portfolio", description: "A showcase of photography, videography, and custom content celebrating rubber, latex, and gimp aesthetics." });
   const [, navigate] = useLocation();
 
   return (

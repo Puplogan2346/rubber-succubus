@@ -5,8 +5,10 @@ import { Camera, Film, HelpCircle, Calendar, Link2, ArrowRight } from "lucide-re
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import { brand } from "@/config/site";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Home() {
+  usePageMeta();
   const [, navigate] = useLocation();
 
   const exploreItems = [
