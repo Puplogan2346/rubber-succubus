@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import { Capacitor } from "@capacitor/core";
 import { brand } from "@/config/site";
+import { prefetchRoute } from "@/lib/routes";
 
 const footerLinks = [
   { label: "Services", path: "/services" },
@@ -8,6 +9,12 @@ const footerLinks = [
   { label: "FAQ", path: "/faq" },
   { label: "Events", path: "/events" },
   { label: "Connect", path: "/connect" },
+];
+
+const legalLinks = [
+  { label: "Privacy", path: "/privacy" },
+  { label: "Terms", path: "/terms" },
+  { label: "2257", path: "/2257" },
 ];
 
 export default function Footer() {
@@ -40,6 +47,8 @@ export default function Footer() {
                 <button
                   key={link.path}
                   onClick={() => navigate(link.path)}
+                  onMouseEnter={() => prefetchRoute(link.path)}
+                  onFocus={() => prefetchRoute(link.path)}
                   className="text-left text-sm text-cream/50 hover:text-cream transition-colors py-1"
                 >
                   {link.label}
@@ -75,6 +84,17 @@ export default function Footer() {
           <p className="text-xs text-cream/40">
             &copy; {new Date().getFullYear()} {brand.name}. All rights reserved.
           </p>
+          <div className="flex items-center gap-4 text-xs text-cream/30">
+            {legalLinks.map((link) => (
+              <button
+                key={link.path}
+                onClick={() => navigate(link.path)}
+                className="hover:text-cream/60 transition-colors"
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
           <p className="text-xs text-cream/30">
             18+ Adult Content. By using this site, you confirm you are of legal age.
           </p>

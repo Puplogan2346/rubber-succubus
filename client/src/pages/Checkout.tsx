@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useLocation, useRoute } from "wouter";
 import { ShieldCheck, CreditCard, ExternalLink, ArrowLeft, Check, AlertCircle, Loader } from "lucide-react";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import { brand, getService, integrations, isConfigured } from "@/config/site";
 import { emailError, requiredText } from "@/lib/validation";
@@ -61,8 +61,14 @@ export default function Checkout() {
       if (isStripeConfigured) {
         const url = new URL(stripeLink);
         if (form.email) url.searchParams.set("prefilled_email", form.email);
-        window.open(url.toString(), "_blank");
-        
+        // Popup blockers return null from window.open — fall back to
+        // navigating this tab instead of falsely reporting success.
+        const opened = window.open(url.toString(), "_blank", "noopener,noreferrer");
+        if (!opened) {
+          window.location.href = url.toString();
+          return;
+        }
+
         // Show success message
         setSubmitSuccess(true);
         setTimeout(() => {
@@ -90,7 +96,7 @@ export default function Checkout() {
         <div className="max-w-lg w-full mt-8 md:mt-12">
 
           {/* Back button */}
-          <motion.button
+          <m.button
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             onClick={() => navigate("/services")}
@@ -98,10 +104,10 @@ export default function Checkout() {
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Services
-          </motion.button>
+          </m.button>
 
           {/* Progress Indicator */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-3 mb-8"
@@ -123,10 +129,10 @@ export default function Checkout() {
               </div>
               Payment
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Service Summary Card */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -145,12 +151,12 @@ export default function Checkout() {
                 <p className="text-lg font-serif italic text-red-400">{service.checkoutPrice}</p>
               </div>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Step Content */}
           <AnimatePresence mode="wait">
             {step === 1 ? (
-              <motion.div
+              <m.div
                 key="step1"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -238,18 +244,18 @@ export default function Checkout() {
                     <p className="text-xs text-cream/30 mt-1">Optional but recommended for custom projects</p>
                   </div>
 
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Button
                       type="submit"
                       className="w-full btn-sheen bg-red-700 hover:bg-red-600 text-white py-4 sm:py-3 px-6 uppercase tracking-wider font-semibold text-sm sm:text-xs"
                     >
                       Continue to Payment
                     </Button>
-                  </motion.div>
+                  </m.div>
                 </form>
-              </motion.div>
+              </m.div>
             ) : (
-              <motion.div
+              <m.div
                 key="step2"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -266,7 +272,7 @@ export default function Checkout() {
 
                 {/* Success Message */}
                 {submitSuccess && (
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
@@ -274,12 +280,12 @@ export default function Checkout() {
                   >
                     <Check className="w-4 h-4" />
                     Payment initiated successfully!
-                  </motion.div>
+                  </m.div>
                 )}
 
                 {/* Error Message */}
                 {submitError && (
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
@@ -287,7 +293,7 @@ export default function Checkout() {
                   >
                     <AlertCircle className="w-4 h-4" />
                     {submitError}
-                  </motion.div>
+                  </m.div>
                 )}
 
                 {/* Summary */}
@@ -312,7 +318,7 @@ export default function Checkout() {
                   )}
                 </div>
 
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button
                     onClick={handleStripePayment}
                     disabled={isSubmitting}
@@ -336,7 +342,7 @@ export default function Checkout() {
                       </>
                     )}
                   </Button>
-                </motion.div>
+                </m.div>
 
                 <button
                   onClick={() => setStep(1)}
@@ -345,12 +351,12 @@ export default function Checkout() {
                 >
                   ← Edit details
                 </button>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
 
           {/* Trust Signals */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
@@ -358,7 +364,7 @@ export default function Checkout() {
           >
             <ShieldCheck className="w-3.5 h-3.5 text-red-900/70" />
             <span>Secure payments powered by Stripe. Your data is never stored on this site.</span>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </PageWrapper>

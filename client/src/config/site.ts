@@ -148,6 +148,12 @@ export interface SocialLink {
   icon?: LucideIcon;
   /** True surfaces the entry in the navigation bar icon row */
   primary?: boolean;
+  /**
+   * Funnel position — lower shows higher on the Connect grid. Creator-funnel
+   * research: paid platform first, alt/free platforms in the middle, tip
+   * jar/wishlist last (nice-to-have revenue, not the core funnel).
+   */
+  priority?: number;
 }
 
 /** Icons for the nav/footer icon row, keyed by social name. */
@@ -159,6 +165,14 @@ export const socialLinks: SocialLink[] = content.socialLinks.map((s) => ({
   ...s,
   icon: SOCIAL_ICONS[s.name],
 }));
+
+/**
+ * Connect-grid display order: live links first (visitors can act on them),
+ * then coming-soon tiles; funnel priority breaks ties within each group.
+ */
+export const orderedSocialLinks: SocialLink[] = [...socialLinks].sort(
+  (a, b) => Number(b.live) - Number(a.live) || (a.priority ?? 99) - (b.priority ?? 99),
+);
 
 /** Links shown as icons in the navigation bar and mobile menu. */
 export const primarySocials: SocialLink[] = [
@@ -207,6 +221,14 @@ export const testimonials: Testimonial[] = content.testimonials;
 
 export const vault: { url: string; label: string } = content.vault;
 
+// ─── WELCOME GIFT (email-capture funnel) ──────────────────────────────────────
+// The most-cited creator conversion tactic: a free teaser unlocked by joining
+// the mailing list. Set `url` to wherever the gift lives (unlisted Drive/
+// Dropbox folder, hidden gallery page, Mega link...) to show the signup
+// section on Home and the unlock in the Connect newsletter. "" hides it all.
+
+export const welcomeGift: { url: string; label: string; blurb: string } = content.welcomeGift;
+
 // ─── THEMED DAYS ──────────────────────────────────────────────────────────────
 // Weekly content themes shown as chips on the Events page, e.g.
 // { day: "Friday", theme: "Rubber Friday" }. Empty array hides the strip.
@@ -232,6 +254,12 @@ export const integrations: {
   stripePaymentLinks: Record<string, string>;
   /** Google Calendar embed src URL (Settings → Integrate calendar) */
   googleCalendarEmbedSrc: string;
+  /**
+   * Google Analytics 4 measurement ID (e.g. "G-XXXXXXXXXX"). Once set, the
+   * site tracks page views so you can see which platform sends visitors —
+   * tag your bio links with ?utm_source=twitter / telegram / linktree etc.
+   */
+  gaMeasurementId: string;
 } = content.integrations;
 
 /** True once a placeholder value has been replaced with a real one. */

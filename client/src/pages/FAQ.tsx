@@ -5,9 +5,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useEffect } from "react";
 import { useLocation } from "wouter";
 import { MessageCircle } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
+import Magnetic from "@/components/Magnetic";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { faqItems } from "@/config/site";
@@ -17,28 +19,48 @@ export default function FAQ() {
   usePageMeta({ title: "FAQ", description: "Answers about pricing, turnaround, payment, boundaries, revisions, and privacy." });
   const [, navigate] = useLocation();
 
+  // FAQPage structured data (JSON-LD) generated from the same config the
+  // page renders — makes the questions eligible for rich results in search.
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
+    });
+    document.head.appendChild(script);
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
   return (
     <PageWrapper>
       <div className="pb-20 px-6">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="pt-12 mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-serif italic mb-4">Frequently Asked Questions</h1>
+            <h1 className="heading-shine text-4xl md:text-5xl font-serif italic mb-4">Frequently Asked Questions</h1>
             <div className="garnet-rule max-w-[50px] mb-6" />
             <p className="text-cream/60 text-base md:text-lg font-light">
               Got questions? I've probably answered them below. If not, reach out and I'll get back to you.
             </p>
-          </motion.div>
+          </m.div>
 
           {/* FAQ Accordion */}
           <Accordion type="single" collapsible className="space-y-3">
             {faqItems.map((faq, i) => (
-              <motion.div
+              <m.div
                 key={faq.id}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -59,12 +81,12 @@ export default function FAQ() {
                     </p>
                   </AccordionContent>
                 </AccordionItem>
-              </motion.div>
+              </m.div>
             ))}
           </Accordion>
 
           {/* Contact CTA */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -76,15 +98,15 @@ export default function FAQ() {
             <p className="text-cream/50 mb-8 max-w-md mx-auto font-light">
               Reach out directly. I'm happy to discuss your project in detail and answer anything not covered here.
             </p>
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <Magnetic className="inline-block">
               <Button
                 onClick={() => navigate("/connect")}
                 className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold"
               >
                 Get in Touch
               </Button>
-            </motion.div>
-          </motion.div>
+            </Magnetic>
+          </m.div>
         </div>
       </div>
 

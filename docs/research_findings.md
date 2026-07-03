@@ -68,3 +68,33 @@
 12. **Referral program** — fans share link, get exclusive content
 13. **VIP/membership tier** — exclusive access to certain content
 14. **Live session schedule** — when you go live on platforms
+
+---
+
+## Round 2 (2026-07): Technical/SEO & Funnel Research
+
+Sources: creator-funnel guides (Exclu, Aruna Talent, TDM Management, SEO Gone Wild),
+adult-SEO checklists (AuthoritySpecialist), structured-data guides (Digital Applied,
+GW Content).
+
+### What successful creator sites do that we now do too
+- **robots.txt + sitemap.xml** submitted to Search Console → implemented (`client/public/`)
+- **Structured data**: WebSite + Person JSON-LD site-wide (index.html), FAQPage
+  JSON-LD on /faq (rich-result eligible) → implemented
+- **Analytics on the funnel**: GA4 with UTM-tagged bio links (?utm_source=twitter
+  / telegram / linktree) to see which platform converts → implemented, activates
+  once `integrations.gaMeasurementId` is set in site.ts
+- **Privacy trust signals**: Referrer-Policy header so outbound clicks don't leak
+  the visitor's referring page; X-Frame-Options / nosniff hardening → netlify.toml
+- **Speed**: immutable caching for hashed assets, hero image preload for LCP
+
+### Recommendations that need owner decisions (not implemented)
+1. **Link priority**: guides consistently order links by desired action — paid
+   platform first, "welcome gift" second, alt platforms third, tip jar last.
+   When OnlyFans/Throne go live in site.ts, order `socialLinks` that way.
+2. **Email capture** converts 5–10% of visitors who aren't ready to subscribe —
+   already built; activate by setting the Mailchimp URL.
+3. **2257 compliance statement + privacy/terms pages** are standard trust
+   signals on adult creator sites; needs real legal copy from the owner.
+4. **Welcome-gift funnel**: a free teaser set behind the email signup is the
+   most-cited conversion tactic across guides.

@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { brand, commissions, primarySocials } from "@/config/site";
+import { prefetchRoute } from "@/lib/routes";
 import AnnouncementBanner from "./AnnouncementBanner";
+import ScrollProgress from "./ScrollProgress";
 
 const navSocials = primarySocials.filter((social) => social.icon);
 
@@ -59,6 +61,8 @@ export default function Navigation() {
           {/* Logo */}
           <button
             onClick={() => handleNavigation("/")}
+            onMouseEnter={() => prefetchRoute("/")}
+            onFocus={() => prefetchRoute("/")}
             className="flex items-center gap-3 group"
           >
             <div className="w-9 h-9 bg-gradient-to-br from-red-800 to-red-950 rounded-full flex items-center justify-center border border-red-700/60 group-hover:border-red-500 transition-colors">
@@ -90,6 +94,8 @@ export default function Navigation() {
               <button
                 key={item.path}
                 onClick={() => handleNavigation(item.path)}
+                onMouseEnter={() => prefetchRoute(item.path)}
+                onFocus={() => prefetchRoute(item.path)}
                 className={`nav-link px-4 py-2 rounded-sm transition-all ${
                   location === item.path
                     ? "text-red-400 bg-red-950/30"
@@ -133,12 +139,13 @@ export default function Navigation() {
           </button>
         </div>
         <AnnouncementBanner />
+        <ScrollProgress />
       </nav>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
+          <m.div
             ref={menuRef}
             id="mobile-menu"
             role="dialog"
@@ -152,7 +159,7 @@ export default function Navigation() {
           >
             <div className="flex flex-col gap-2 max-w-sm mx-auto mt-8">
               {navItems.map((item, i) => (
-                <motion.button
+                <m.button
                   key={item.path}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -161,6 +168,7 @@ export default function Navigation() {
                     handleNavigation(item.path);
                     setMobileOpen(false);
                   }}
+                  onFocus={() => prefetchRoute(item.path)}
                   className={`text-left text-2xl font-serif italic py-4 px-4 border-b border-red-900/20 transition-colors ${
                     location === item.path
                       ? "text-red-400"
@@ -168,11 +176,11 @@ export default function Navigation() {
                   }`}
                 >
                   {item.label}
-                </motion.button>
+                </m.button>
               ))}
 
               {/* Mobile Social Links */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navItems.length * 0.05 }}
@@ -198,10 +206,10 @@ export default function Navigation() {
                     );
                   })}
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* Mobile CTA */}
-              <motion.button
+              <m.button
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: (navItems.length + 1) * 0.05 }}
@@ -212,9 +220,9 @@ export default function Navigation() {
                 className="mt-6 text-sm uppercase tracking-widest text-cream/40 hover:text-cream/60 transition-colors"
               >
                 ← Back to Home
-              </motion.button>
+              </m.button>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

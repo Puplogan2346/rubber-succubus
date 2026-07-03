@@ -92,16 +92,19 @@ export interface SiteContent {
     emoji: string;
     live: boolean;
     primary?: boolean;
+    priority?: number;
   }[];
   announcement: { message: string; targetDate?: string; linkText?: string; linkHref?: string };
   testimonials: { quote: string; attribution: string }[];
   vault: { url: string; label: string };
+  welcomeGift: { url: string; label: string; blurb: string };
   themedDays: { day: string; theme: string }[];
   integrations: {
     formspreeFormId: string;
     mailchimpActionUrl: string;
     stripePaymentLinks: Record<string, string>;
     googleCalendarEmbedSrc: string;
+    gaMeasurementId: string;
   };
 }
 

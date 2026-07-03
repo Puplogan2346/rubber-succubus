@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Rubber Succubus — Custom content creation. Photography, videography, and bespoke content. 18+ only." />
     <meta name="theme-color" content="#080808" />
     <meta name="rating" content="adult" />
@@ -20,6 +20,33 @@
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@Rubber_Succubus" />
+    <!-- Hero/site background is the largest visual — fetch it early for LCP -->
+    <link rel="preload" as="image" href="/bg.webp" fetchpriority="high" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://rubbersuccubus.com/#website",
+            "url": "https://rubbersuccubus.com/",
+            "name": "Rubber Succubus",
+            "description": "Custom content creation. Photography, videography, and bespoke content. 18+ only."
+          },
+          {
+            "@type": "Person",
+            "@id": "https://rubbersuccubus.com/#creator",
+            "name": "Rubber Succubus",
+            "url": "https://rubbersuccubus.com/",
+            "sameAs": [
+              "https://x.com/rubber_succubus",
+              "https://t.me/rubber_succubus",
+              "https://linktr.ee/Rubber_Succubus"
+            ]
+          }
+        ]
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
