@@ -8,7 +8,10 @@ import Ticker from "@/components/Ticker";
 import HeroShine from "@/components/HeroShine";
 import VaultTeaser from "@/components/VaultTeaser";
 import StickyBookCTA from "@/components/StickyBookCTA";
+import Magnetic from "@/components/Magnetic";
+import TiltCard from "@/components/TiltCard";
 import { brand, testimonials } from "@/config/site";
+import { prefetchRoute } from "@/lib/routes";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Home() {
@@ -80,7 +83,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="text-5xl md:text-6xl lg:text-7xl font-serif italic mb-4 tracking-tight leading-[1.1] text-cream drop-shadow-lg"
+                className="heading-shine text-5xl md:text-6xl lg:text-7xl font-serif italic mb-4 tracking-tight leading-[1.1] drop-shadow-lg"
               >
                 {brand.name}
               </m.h1>
@@ -117,24 +120,26 @@ export default function Home() {
                 transition={{ delay: 0.6 }}
                 className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center sm:items-stretch"
               >
-                <m.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+                <Magnetic scale={1.05} className="w-full sm:w-auto">
                   <Button
                     onClick={() => navigate("/services")}
+                    onMouseEnter={() => prefetchRoute("/services")}
                     className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold shadow-lg shadow-red-900/60 flex items-center justify-center gap-2 w-full sm:w-auto"
                   >
                     Explore Services
                     <ArrowRight className="w-4 h-4" />
                   </Button>
-                </m.div>
-                <m.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+                </Magnetic>
+                <Magnetic scale={1.05} className="w-full sm:w-auto">
                   <Button
                     onClick={() => navigate("/connect")}
+                    onMouseEnter={() => prefetchRoute("/connect")}
                     variant="outline"
                     className="border-cream/40 text-cream hover:bg-red-950/40 hover:border-cream/60 px-8 py-3 uppercase tracking-wider transition-all w-full sm:w-auto"
                   >
                     Get Connected
                   </Button>
-                </m.div>
+                </Magnetic>
               </m.div>
             </m.div>
           </div>
@@ -158,25 +163,31 @@ export default function Home() {
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-5">
               {exploreItems.map((item, i) => (
-                <m.button
+                <m.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ delay: i * 0.08, duration: 0.4 }}
-                  whileHover={{ y: -4, borderColor: "rgba(185, 28, 28, 0.6)" }}
-                  onClick={() => navigate(item.path)}
-                  className="relative p-5 md:p-6 border border-red-900/30 bg-black/40 hover:bg-red-950/15 transition-all text-left group rounded-sm overflow-hidden"
                 >
-                  {/* Gloss effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+                  <TiltCard
+                    as="button"
+                    type="button"
+                    onClick={() => navigate(item.path)}
+                    onMouseEnter={() => prefetchRoute(item.path)}
+                    onFocus={() => prefetchRoute(item.path)}
+                    className="w-full h-full p-5 md:p-6 border border-red-900/30 bg-black/40 hover:bg-red-950/15 hover:border-red-700/60 transition-colors text-left group rounded-sm overflow-hidden"
+                  >
+                    {/* Gloss effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
 
-                  <item.icon className="w-6 h-6 text-red-400/70 mb-3 group-hover:text-red-400 transition-colors" />
-                  <h3 className="font-serif italic text-base md:text-lg mb-1 group-hover:text-red-300 transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-cream/45 leading-relaxed">{item.desc}</p>
-                </m.button>
+                    <item.icon className="w-6 h-6 text-red-400/70 mb-3 group-hover:text-red-400 transition-colors" />
+                    <h3 className="font-serif italic text-base md:text-lg mb-1 group-hover:text-red-300 transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-cream/45 leading-relaxed">{item.desc}</p>
+                  </TiltCard>
+                </m.div>
               ))}
             </div>
           </div>
@@ -277,14 +288,15 @@ export default function Home() {
               <p className="text-cream/60 mb-8 font-light">
                 Get notified when new content drops and exclusive announcements.
               </p>
-              <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Magnetic className="inline-block">
                 <Button
                   onClick={() => navigate("/connect")}
+                  onMouseEnter={() => prefetchRoute("/connect")}
                   className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold"
                 >
                   Subscribe
                 </Button>
-              </m.div>
+              </Magnetic>
             </m.div>
           </div>
         </section>

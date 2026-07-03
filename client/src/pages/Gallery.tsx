@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Image, Play, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { m } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
+import Magnetic from "@/components/Magnetic";
+import TiltCard from "@/components/TiltCard";
 import { galleryItems } from "@/config/site";
 import StickyBookCTA from "@/components/StickyBookCTA";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -16,6 +18,21 @@ export default function Gallery() {
   // Real photos only — the lightbox navigates within these
   const photos = galleryItems.filter((item) => item.type === "photo" && item.src);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
+
+  const stepLightbox = (delta: 1 | -1) =>
+    setLightboxIndex((i) => (i === null ? i : (i + delta + photos.length) % photos.length));
+
+  // Swipe left/right steps through photos on touch screens
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(dx) > 50) stepLightbox(dx < 0 ? 1 : -1);
+  };
 
   useEffect(() => {
     if (lightboxIndex === null) return;
@@ -44,7 +61,7 @@ export default function Gallery() {
             transition={{ duration: 0.5 }}
             className="pt-12 mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-serif italic mb-4">Portfolio</h1>
+            <h1 className="heading-shine text-4xl md:text-5xl font-serif italic mb-4">Portfolio</h1>
             <div className="garnet-rule max-w-[50px] mb-6" />
             <p className="text-cream/60 max-w-2xl text-base md:text-lg font-light leading-relaxed">
               A showcase of my best work. Photography, videography, and custom content
@@ -56,8 +73,9 @@ export default function Gallery() {
           <div className="columns-1 sm:columns-2 md:columns-3 gap-4 mb-16">
             {galleryItems.map((item, i) => {
               const tile = (
-                <div
-                  className={`${item.aspect} relative border border-red-900/30 bg-red-950/8 overflow-hidden group rounded-sm`}
+                <TiltCard
+                  maxTilt={4}
+                  className={`${item.aspect} border border-red-900/30 bg-red-950/8 overflow-hidden group rounded-sm`}
                 >
                   {item.src ? (
                     /* Real content */
@@ -102,7 +120,7 @@ export default function Gallery() {
                       <Play className="w-3 h-3 text-white fill-white" />
                     </div>
                   )}
-                </div>
+                </TiltCard>
               );
 
               return (
@@ -171,7 +189,7 @@ export default function Gallery() {
               Check out my social media for the full portfolio, behind-the-scenes content, and exclusive drops.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <m.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <Magnetic>
                 <Button
                   onClick={() => navigate("/connect")}
                   className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold flex items-center gap-2"
@@ -179,8 +197,8 @@ export default function Gallery() {
                   Follow My Socials
                   <ExternalLink className="w-4 h-4" />
                 </Button>
-              </m.div>
-              <m.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              </Magnetic>
+              <Magnetic>
                 <Button
                   onClick={() => navigate("/services")}
                   variant="outline"
@@ -188,7 +206,7 @@ export default function Gallery() {
                 >
                   Book a Session
                 </Button>
-              </m.div>
+              </Magnetic>
             </div>
           </m.div>
         </div>
@@ -196,12 +214,17 @@ export default function Gallery() {
 
       {/* Lightbox */}
       {lightboxIndex !== null && photos[lightboxIndex] && (
-        <div
+        <m.div
           role="dialog"
           aria-modal="true"
           aria-label={photos[lightboxIndex].alt ?? "Photo"}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[60] bg-black/95 flex items-center justify-center p-4 md:p-10"
           onClick={() => setLightboxIndex(null)}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
         >
           <button
             type="button"
@@ -218,7 +241,7 @@ export default function Gallery() {
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                setLightboxIndex((lightboxIndex - 1 + photos.length) % photos.length);
+                stepLightbox(-1);
               }}
               aria-label="Previous photo"
               className="absolute left-2 md:left-6 p-2 text-cream/60 hover:text-cream transition-colors z-10"
@@ -228,9 +251,13 @@ export default function Gallery() {
           )}
 
           <figure className="max-w-5xl max-h-full" onClick={(e) => e.stopPropagation()}>
-            <img
+            <m.img
+              key={photos[lightboxIndex].id}
               src={photos[lightboxIndex].src}
               alt={photos[lightboxIndex].alt ?? ""}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
               className="max-h-[82vh] w-auto mx-auto object-contain rounded-sm border border-red-900/30"
             />
             {(photos[lightboxIndex].caption ?? photos[lightboxIndex].alt) && (
@@ -245,7 +272,7 @@ export default function Gallery() {
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                setLightboxIndex((lightboxIndex + 1) % photos.length);
+                stepLightbox(1);
               }}
               aria-label="Next photo"
               className="absolute right-2 md:right-6 p-2 text-cream/60 hover:text-cream transition-colors z-10"
@@ -253,7 +280,16 @@ export default function Gallery() {
               <ChevronRight className="w-8 h-8" />
             </button>
           )}
-        </div>
+
+          {photos.length > 1 && (
+            <p
+              aria-hidden="true"
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs tracking-[0.25em] text-cream/50 tabular-nums"
+            >
+              {lightboxIndex + 1} / {photos.length}
+            </p>
+          )}
+        </m.div>
       )}
 
       <StickyBookCTA />

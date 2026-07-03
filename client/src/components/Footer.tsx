@@ -1,5 +1,6 @@
 import { useLocation } from "wouter";
 import { brand } from "@/config/site";
+import { prefetchRoute } from "@/lib/routes";
 
 const footerLinks = [
   { label: "Services", path: "/services" },
@@ -39,6 +40,8 @@ export default function Footer() {
                 <button
                   key={link.path}
                   onClick={() => navigate(link.path)}
+                  onMouseEnter={() => prefetchRoute(link.path)}
+                  onFocus={() => prefetchRoute(link.path)}
                   className="text-left text-sm text-cream/50 hover:text-cream transition-colors py-1"
                 >
                   {link.label}

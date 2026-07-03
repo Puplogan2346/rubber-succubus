@@ -166,7 +166,7 @@ export default function CustomOrder() {
             transition={{ duration: 0.5 }}
             className="mb-10"
           >
-            <h1 className="text-4xl md:text-5xl font-serif italic mb-4">Build Your Custom Order</h1>
+            <h1 className="heading-shine text-4xl md:text-5xl font-serif italic mb-4">Build Your Custom Order</h1>
             <div className="garnet-rule max-w-[50px] mb-6" />
             <p className="text-cream/60 font-light">
               Three quick steps. The more you tell me, the better it gets.

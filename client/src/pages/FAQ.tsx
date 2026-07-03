@@ -8,6 +8,7 @@ import {
 import { useLocation } from "wouter";
 import { MessageCircle } from "lucide-react";
 import { m } from "framer-motion";
+import Magnetic from "@/components/Magnetic";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { faqItems } from "@/config/site";
@@ -28,7 +29,7 @@ export default function FAQ() {
             transition={{ duration: 0.5 }}
             className="pt-12 mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-serif italic mb-4">Frequently Asked Questions</h1>
+            <h1 className="heading-shine text-4xl md:text-5xl font-serif italic mb-4">Frequently Asked Questions</h1>
             <div className="garnet-rule max-w-[50px] mb-6" />
             <p className="text-cream/60 text-base md:text-lg font-light">
               Got questions? I've probably answered them below. If not, reach out and I'll get back to you.
@@ -76,14 +77,14 @@ export default function FAQ() {
             <p className="text-cream/50 mb-8 max-w-md mx-auto font-light">
               Reach out directly. I'm happy to discuss your project in detail and answer anything not covered here.
             </p>
-            <m.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <Magnetic className="inline-block">
               <Button
                 onClick={() => navigate("/connect")}
                 className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold"
               >
                 Get in Touch
               </Button>
-            </m.div>
+            </Magnetic>
           </m.div>
         </div>
       </div>

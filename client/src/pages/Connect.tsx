@@ -124,7 +124,7 @@ export default function Connect() {
             transition={{ duration: 0.5 }}
             className="pt-12 mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-serif italic mb-4">Let's Connect</h1>
+            <h1 className="heading-shine text-4xl md:text-5xl font-serif italic mb-4">Let's Connect</h1>
             <div className="garnet-rule max-w-[50px] mb-6" />
             <p className="text-cream/60 max-w-2xl text-base md:text-lg font-light leading-relaxed">
               Follow me across all platforms to stay updated on new content, behind-the-scenes moments, and exclusive drops.

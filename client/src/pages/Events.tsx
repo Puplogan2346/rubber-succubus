@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import { Calendar, MapPin, Clock, ExternalLink } from "lucide-react";
 import { m } from "framer-motion";
+import Magnetic from "@/components/Magnetic";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { brand, integrations, isConfigured, themedDays, upcomingEvents } from "@/config/site";
@@ -23,7 +24,7 @@ export default function Events() {
             transition={{ duration: 0.5 }}
             className="pt-12 mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-serif italic mb-4">Events</h1>
+            <h1 className="heading-shine text-4xl md:text-5xl font-serif italic mb-4">Events</h1>
             <div className="garnet-rule max-w-[50px] mb-6" />
             <p className="text-cream/60 max-w-2xl text-base md:text-lg font-light leading-relaxed">
               Shoots, collabs, appearances, and everything in between.
@@ -159,17 +160,17 @@ export default function Events() {
             <p className="text-cream/50 mb-8 max-w-md mx-auto font-light">
               Follow me on Twitter/X for real-time updates on events, shoots, and exclusive content.
             </p>
-            <m.a
+            <Magnetic className="inline-block">
+            <a
               href={brand.twitterUrl}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
               className="inline-flex items-center gap-2 btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold transition-all rounded-sm"
             >
               Follow {brand.handle}
               <ExternalLink className="w-4 h-4" />
-            </m.a>
+            </a>
+            </Magnetic>
           </m.div>
         </div>
       </div>

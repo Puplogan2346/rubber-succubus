@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import { useLocation } from "wouter";
 import { m } from "framer-motion";
+import Magnetic from "@/components/Magnetic";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function NotFound() {
@@ -30,7 +31,7 @@ export default function NotFound() {
           Head back and try something shinier.
         </p>
 
-        <m.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+        <Magnetic className="inline-block">
           <Button
             onClick={() => navigate("/")}
             className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold flex items-center gap-2 mx-auto"
@@ -38,7 +39,7 @@ export default function NotFound() {
             <Home className="w-4 h-4" />
             Back to Home
           </Button>
-        </m.div>
+        </Magnetic>
       </m.div>
     </div>
   );

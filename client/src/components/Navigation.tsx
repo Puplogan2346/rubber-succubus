@@ -3,7 +3,9 @@ import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { brand, commissions, primarySocials } from "@/config/site";
+import { prefetchRoute } from "@/lib/routes";
 import AnnouncementBanner from "./AnnouncementBanner";
+import ScrollProgress from "./ScrollProgress";
 
 const navSocials = primarySocials.filter((social) => social.icon);
 
@@ -59,6 +61,8 @@ export default function Navigation() {
           {/* Logo */}
           <button
             onClick={() => handleNavigation("/")}
+            onMouseEnter={() => prefetchRoute("/")}
+            onFocus={() => prefetchRoute("/")}
             className="flex items-center gap-3 group"
           >
             <div className="w-9 h-9 bg-gradient-to-br from-red-800 to-red-950 rounded-full flex items-center justify-center border border-red-700/60 group-hover:border-red-500 transition-colors">
@@ -90,6 +94,8 @@ export default function Navigation() {
               <button
                 key={item.path}
                 onClick={() => handleNavigation(item.path)}
+                onMouseEnter={() => prefetchRoute(item.path)}
+                onFocus={() => prefetchRoute(item.path)}
                 className={`nav-link px-4 py-2 rounded-sm transition-all ${
                   location === item.path
                     ? "text-red-400 bg-red-950/30"
@@ -133,6 +139,7 @@ export default function Navigation() {
           </button>
         </div>
         <AnnouncementBanner />
+        <ScrollProgress />
       </nav>
 
       {/* Mobile Menu Overlay */}
@@ -161,6 +168,7 @@ export default function Navigation() {
                     handleNavigation(item.path);
                     setMobileOpen(false);
                   }}
+                  onFocus={() => prefetchRoute(item.path)}
                   className={`text-left text-2xl font-serif italic py-4 px-4 border-b border-red-900/20 transition-colors ${
                     location === item.path
                       ? "text-red-400"
