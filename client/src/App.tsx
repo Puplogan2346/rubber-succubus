@@ -4,6 +4,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import AgeGate from "./components/AgeGate";
+import Analytics from "./components/Analytics";
 import CursorGlow from "./components/CursorGlow";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -52,6 +53,7 @@ function App() {
         <LazyMotion features={domAnimation} strict>
           <MotionConfig reducedMotion="user">
             <ScrollToTop />
+            <Analytics />
             <CursorGlow />
             <AgeGate>
               <Router />

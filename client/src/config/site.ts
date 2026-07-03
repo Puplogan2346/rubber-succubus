@@ -393,6 +393,12 @@ export const integrations = {
   } as Record<string, string>,
   /** Google Calendar embed src URL (Settings → Integrate calendar) */
   googleCalendarEmbedSrc: "YOUR_GOOGLE_CALENDAR_EMBED_SRC",
+  /**
+   * Google Analytics 4 measurement ID (e.g. "G-XXXXXXXXXX"). Once set, the
+   * site tracks page views so you can see which platform sends visitors —
+   * tag your bio links with ?utm_source=twitter / telegram / linktree etc.
+   */
+  gaMeasurementId: "YOUR_GA4_MEASUREMENT_ID",
 };
 
 /** True once a placeholder value has been replaced with a real one. */

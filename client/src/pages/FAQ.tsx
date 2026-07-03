@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useEffect } from "react";
 import { useLocation } from "wouter";
 import { MessageCircle } from "lucide-react";
 import { m } from "framer-motion";
@@ -17,6 +18,26 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 export default function FAQ() {
   usePageMeta({ title: "FAQ", description: "Answers about pricing, turnaround, payment, boundaries, revisions, and privacy." });
   const [, navigate] = useLocation();
+
+  // FAQPage structured data (JSON-LD) generated from the same config the
+  // page renders — makes the questions eligible for rich results in search.
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
+    });
+    document.head.appendChild(script);
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 
   return (
     <PageWrapper>
