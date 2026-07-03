@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { m } from "framer-motion";
 import { brand } from "@/config/site";
+import { notifySuccess } from "@/lib/haptics";
 
 const STORAGE_KEY = "rs-age-verified";
 
@@ -28,6 +29,7 @@ export default function AgeGate({ children }: { children: React.ReactNode }) {
     } catch {
       // Private mode: proceed for this session only.
     }
+    notifySuccess();
     setVerified(true);
   };
 
@@ -109,6 +111,7 @@ export default function AgeGate({ children }: { children: React.ReactNode }) {
         >
           <Button
             onClick={handleEnter}
+            data-haptic="none"
             className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 text-sm uppercase tracking-wider font-semibold shadow-lg shadow-red-900/40 transition-all hover:shadow-red-800/50"
           >
             I Am 18+ &bull; Enter

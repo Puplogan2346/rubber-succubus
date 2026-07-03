@@ -56,7 +56,7 @@ export default function Navigation() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-red-900/20">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-red-900/20 pt-[env(safe-area-inset-top)]">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           {/* Logo */}
           <button
@@ -155,7 +155,7 @@ export default function Navigation() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/98 pt-20 px-6 overflow-y-auto"
+            className="fixed inset-0 z-40 bg-black/98 pt-[calc(5rem+env(safe-area-inset-top))] px-6 overflow-y-auto"
           >
             <div className="flex flex-col gap-2 max-w-sm mx-auto mt-8">
               {navItems.map((item, i) => (

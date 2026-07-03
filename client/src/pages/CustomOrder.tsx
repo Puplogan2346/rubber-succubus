@@ -16,6 +16,7 @@ import { m, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import { brand, integrations, isConfigured } from "@/config/site";
 import { emailError, requiredText } from "@/lib/validation";
+import { notifySuccess } from "@/lib/haptics";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 const FORMATS = [
@@ -105,6 +106,7 @@ export default function CustomOrder() {
 
     if (!isConfigured(integrations.formspreeFormId)) {
       const subject = encodeURIComponent(`Custom Order Brief: ${formatLabel}`);
+      notifySuccess();
       window.location.href = `mailto:${brand.email}?subject=${subject}&body=${encodeURIComponent(composeBody())}`;
       return;
     }
@@ -121,6 +123,7 @@ export default function CustomOrder() {
           message: composeBody(),
         }),
       });
+      if (res.ok) notifySuccess();
       setStatus(res.ok ? "success" : "error");
     } catch {
       setStatus("error");
