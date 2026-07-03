@@ -289,9 +289,18 @@ export interface SocialLink {
   icon?: LucideIcon;
   /** True surfaces the entry in the navigation bar icon row */
   primary?: boolean;
+  /**
+   * Funnel position — lower shows higher on the Connect grid. Creator-funnel
+   * research: paid platform first, alt/free platforms in the middle, tip
+   * jar/wishlist last (nice-to-have revenue, not the core funnel).
+   */
+  priority?: number;
 }
 
 export const socialLinks: SocialLink[] = [
+  // Paid platform — top of the funnel the moment it goes live
+  { name: "OnlyFans", handle: "[Coming soon]", url: "#", emoji: "🔞", live: false, priority: 1 },
+  // Free/alt platforms
   {
     name: "Twitter / X",
     handle: "@Rubber_Succubus",
@@ -300,16 +309,25 @@ export const socialLinks: SocialLink[] = [
     live: true,
     icon: Heart,
     primary: true,
+    priority: 2,
   },
-  { name: "Telegram", handle: "@Rubber_Succubus", url: "https://t.me/rubber_succubus", emoji: "✈️", live: true },
-  { name: "Linktree", handle: "Rubber_Succubus", url: "https://linktr.ee/Rubber_Succubus", emoji: "🔗", live: true },
-  { name: "Instagram", handle: "[Coming soon]", url: "#", emoji: "📷", live: false },
-  { name: "FetLife", handle: "[Coming soon]", url: "#", emoji: "🖤", live: false },
-  { name: "OnlyFans", handle: "[Coming soon]", url: "#", emoji: "🔞", live: false },
-  { name: "Throne Wishlist", handle: "[Coming soon]", url: "#", emoji: "👑", live: false },
-  { name: "Reddit", handle: "[Coming soon]", url: "#", emoji: "🤖", live: false },
-  { name: "Bluesky", handle: "[Coming soon]", url: "#", emoji: "🦋", live: false },
+  { name: "Telegram", handle: "@Rubber_Succubus", url: "https://t.me/rubber_succubus", emoji: "✈️", live: true, priority: 3 },
+  { name: "Linktree", handle: "Rubber_Succubus", url: "https://linktr.ee/Rubber_Succubus", emoji: "🔗", live: true, priority: 4 },
+  { name: "Instagram", handle: "[Coming soon]", url: "#", emoji: "📷", live: false, priority: 5 },
+  { name: "FetLife", handle: "[Coming soon]", url: "#", emoji: "🖤", live: false, priority: 6 },
+  { name: "Reddit", handle: "[Coming soon]", url: "#", emoji: "🤖", live: false, priority: 7 },
+  { name: "Bluesky", handle: "[Coming soon]", url: "#", emoji: "🦋", live: false, priority: 8 },
+  // Tip jar / wishlist — always last
+  { name: "Throne Wishlist", handle: "[Coming soon]", url: "#", emoji: "👑", live: false, priority: 9 },
 ];
+
+/**
+ * Connect-grid display order: live links first (visitors can act on them),
+ * then coming-soon tiles; funnel priority breaks ties within each group.
+ */
+export const orderedSocialLinks: SocialLink[] = [...socialLinks].sort(
+  (a, b) => Number(b.live) - Number(a.live) || (a.priority ?? 99) - (b.priority ?? 99),
+);
 
 /** Links shown as icons in the navigation bar and mobile menu. */
 export const primarySocials: SocialLink[] = [
@@ -354,6 +372,18 @@ export interface Testimonial {
 
 export const testimonials: Testimonial[] = [];
 
+// ─── WELCOME GIFT (email-capture funnel) ──────────────────────────────────────
+// The most-cited creator conversion tactic: a free teaser unlocked by joining
+// the mailing list. Set `url` to wherever the gift lives (unlisted Drive/
+// Dropbox folder, hidden gallery page, Mega link...) to show the signup
+// section on Home and the unlock in the Connect newsletter. "" hides it all.
+
+export const welcomeGift = {
+  url: "",
+  label: "Free Teaser Set",
+  blurb: "Five exclusive shots that never hit the feed — yours for an email.",
+};
+
 // ─── THE VAULT (exclusive content teaser) ─────────────────────────────────────
 // Set `url` to your paid-content page (OnlyFans etc.) to show a teaser section
 // of blurred locked tiles on the Home page. Leave "" to hide it entirely.
@@ -393,6 +423,12 @@ export const integrations = {
   } as Record<string, string>,
   /** Google Calendar embed src URL (Settings → Integrate calendar) */
   googleCalendarEmbedSrc: "YOUR_GOOGLE_CALENDAR_EMBED_SRC",
+  /**
+   * Google Analytics 4 measurement ID (e.g. "G-XXXXXXXXXX"). Once set, the
+   * site tracks page views so you can see which platform sends visitors —
+   * tag your bio links with ?utm_source=twitter / telegram / linktree etc.
+   */
+  gaMeasurementId: "YOUR_GA4_MEASUREMENT_ID",
 };
 
 /** True once a placeholder value has been replaced with a real one. */

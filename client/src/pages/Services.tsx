@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { ArrowRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
+import Magnetic from "@/components/Magnetic";
+import TiltCard from "@/components/TiltCard";
 import { commissions, services } from "@/config/site";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
@@ -35,13 +37,13 @@ export default function Services() {
       <div className="pb-20 px-6">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="pt-12 mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-serif italic mb-4">What I Offer</h1>
+            <h1 className="heading-shine text-4xl md:text-5xl font-serif italic mb-4">What I Offer</h1>
             <div className="garnet-rule max-w-[50px] mb-6" />
             <p className="text-cream/60 max-w-2xl text-base md:text-lg font-light leading-relaxed">
               Custom content creation tailored to your vision. Whether you need photography, videography,
@@ -55,19 +57,18 @@ export default function Services() {
                 {commissions.note ? ` · ${commissions.note}` : ""}
               </p>
             )}
-          </motion.div>
+          </m.div>
 
           {/* Services Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {services.map((service, i) => (
-              <motion.div
+              <m.div
                 key={service.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1, duration: 0.4 }}
-                whileHover={{ y: -3 }}
-                className="relative border border-red-900/30 bg-black/40 p-7 md:p-8 hover:border-red-700/60 transition-all group rounded-sm overflow-hidden"
               >
+              <TiltCard className="h-full border border-red-900/30 bg-black/40 p-7 md:p-8 hover:border-red-700/60 transition-colors group rounded-sm overflow-hidden">
                 {/* Gloss overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -103,7 +104,7 @@ export default function Services() {
                     <p className="text-[10px] uppercase tracking-widest text-cream/35 mb-1">Starting at</p>
                     <p className="text-xl font-serif italic text-cream/90">{service.price}</p>
                   </div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Magnetic scale={1.05}>
                     <Button
                       onClick={() =>
                         navigate(service.id === "custom-order" ? "/custom-order" : `/checkout/${service.id}`)
@@ -113,14 +114,15 @@ export default function Services() {
                       {service.id === "custom-order" ? "Start a Brief" : "Book Now"}
                       <ArrowRight className="w-3 h-3" />
                     </Button>
-                  </motion.div>
+                  </Magnetic>
                 </div>
-              </motion.div>
+              </TiltCard>
+              </m.div>
             ))}
           </div>
 
           {/* How it works */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
@@ -131,7 +133,7 @@ export default function Services() {
             <div className="garnet-rule max-w-[40px] mb-10" />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {PROCESS_STEPS.map((processStep, i) => (
-                <motion.div
+                <m.div
                   key={processStep.title}
                   initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -147,13 +149,13 @@ export default function Services() {
                   </span>
                   <h3 className="relative font-serif italic text-lg mb-2">{processStep.title}</h3>
                   <p className="relative text-sm text-cream/50 font-light leading-relaxed">{processStep.copy}</p>
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Custom Order CTA */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -165,15 +167,15 @@ export default function Services() {
               If none of the above fit exactly what you're looking for, build me a brief.
               I love custom projects and pushing creative boundaries.
             </p>
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <Magnetic className="inline-block">
               <Button
                 onClick={() => navigate(commissions.status === "closed" ? "/connect" : "/custom-order")}
                 className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold"
               >
                 {commissions.status === "closed" ? "Get in Touch" : "Build Your Custom Order"}
               </Button>
-            </motion.div>
-          </motion.div>
+            </Magnetic>
+          </m.div>
         </div>
       </div>
 

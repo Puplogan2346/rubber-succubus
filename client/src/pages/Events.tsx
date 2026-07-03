@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import { Calendar, MapPin, Clock, ExternalLink } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
+import Magnetic from "@/components/Magnetic";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { brand, integrations, isConfigured, themedDays, upcomingEvents } from "@/config/site";
@@ -17,23 +18,23 @@ export default function Events() {
       <div className="pb-20 px-6">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="pt-12 mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-serif italic mb-4">Events</h1>
+            <h1 className="heading-shine text-4xl md:text-5xl font-serif italic mb-4">Events</h1>
             <div className="garnet-rule max-w-[50px] mb-6" />
             <p className="text-cream/60 max-w-2xl text-base md:text-lg font-light leading-relaxed">
               Shoots, collabs, appearances, and everything in between.
               Stay in the loop on where I'll be and what's coming next.
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Themed days — hidden until entries exist in site.ts */}
           {themedDays.length > 0 && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05, duration: 0.4 }}
@@ -48,11 +49,11 @@ export default function Events() {
                   <span className="font-serif italic text-sm text-red-300">{themed.theme}</span>
                 </div>
               ))}
-            </motion.div>
+            </m.div>
           )}
 
           {/* Google Calendar Embed */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.5 }}
@@ -72,8 +73,7 @@ export default function Events() {
                   style={{ border: 0 }}
                   width="100%"
                   height="500"
-                  frameBorder="0"
-                  scrolling="no"
+                  loading="lazy"
                   title="Rubber Succubus Events Calendar"
                   className="block"
                 />
@@ -88,10 +88,10 @@ export default function Events() {
                 </p>
               </div>
             )}
-          </motion.div>
+          </m.div>
 
           {/* Upcoming Events List */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
@@ -101,7 +101,7 @@ export default function Events() {
 
             <div className="space-y-4">
               {upcomingEvents.map((event, i) => (
-                <motion.div
+                <m.div
                   key={i}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -143,13 +143,13 @@ export default function Events() {
                       </a>
                     )}
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Stay Updated CTA */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -160,18 +160,18 @@ export default function Events() {
             <p className="text-cream/50 mb-8 max-w-md mx-auto font-light">
               Follow me on Twitter/X for real-time updates on events, shoots, and exclusive content.
             </p>
-            <motion.a
+            <Magnetic className="inline-block">
+            <a
               href={brand.twitterUrl}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
               className="inline-flex items-center gap-2 btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold transition-all rounded-sm"
             >
               Follow {brand.handle}
               <ExternalLink className="w-4 h-4" />
-            </motion.a>
-          </motion.div>
+            </a>
+            </Magnetic>
+          </m.div>
         </div>
       </div>
 

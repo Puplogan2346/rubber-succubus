@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Lock, ExternalLink } from "lucide-react";
 import { vault } from "@/config/site";
 
@@ -19,7 +19,7 @@ export default function VaultTeaser() {
   return (
     <section className="py-20 px-6 border-t border-red-900/15">
       <div className="max-w-5xl mx-auto">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -31,11 +31,11 @@ export default function VaultTeaser() {
           <p className="text-cream/60 mb-12 font-light max-w-md mx-auto">
             The shiniest work doesn't live here. It's waiting behind the door.
           </p>
-        </motion.div>
+        </m.div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
           {TEASER_TILES.map((gradient, i) => (
-            <motion.div
+            <m.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -48,18 +48,18 @@ export default function VaultTeaser() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <Lock className="w-6 h-6 text-red-400/60" />
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           className="text-center"
         >
-          <motion.a
+          <m.a
             href={vault.url}
             target="_blank"
             rel="noopener noreferrer"
@@ -70,8 +70,8 @@ export default function VaultTeaser() {
             <Lock className="w-4 h-4" />
             {vault.label}
             <ExternalLink className="w-3.5 h-3.5" />
-          </motion.a>
-        </motion.div>
+          </m.a>
+        </m.div>
       </div>
     </section>
   );

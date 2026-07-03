@@ -22,6 +22,13 @@ html {
 
 @custom-variant dark (&:is(.dark *));
 
+/* Custom palette colors. Without this the `cream` utilities used across the
+   site (text-cream/60, border-cream/30, …) generate no CSS at all — text
+   silently falls back to the inherited body color at full opacity. */
+@theme {
+  --color-cream: #ede8dc;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -261,6 +268,12 @@ html {
   .animate-ticker {
     animation: ticker-scroll 40s linear infinite;
   }
+  /* Pause the marquee while hovered so a word can be admired (and lit up) */
+  @media (hover: hover) {
+    .ticker-strip:hover .animate-ticker {
+      animation-play-state: paused;
+    }
+  }
   @media (prefers-reduced-motion: reduce) {
     .animate-ticker {
       animation-play-state: paused;
@@ -338,13 +351,61 @@ html {
     color: oklch(0.42 0.18 20);
   }
 
-  /* Card tilt effect via JS — base styles */
+  /* Card tilt effect via JS (TiltCard component) — base styles */
   .tilt-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     transform-style: preserve-3d;
   }
   .tilt-card:hover {
     box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 30px oklch(0.42 0.18 20 / 0.15);
+  }
+
+  /* Specular highlight tracking the cursor over a tilted card.
+     --shine-x/--shine-y are set by TiltCard on mousemove. */
+  .tilt-shine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--shine-x, 50%) var(--shine-y, 50%),
+      rgba(255, 246, 230, 0.08),
+      rgba(193, 0, 31, 0.04) 45%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+  @media (hover: hover) {
+    .tilt-shine:hover::after {
+      opacity: 1;
+    }
+  }
+
+  /* Light glint sweeping across big serif headings, like the button sheen.
+     The band crosses in the first ~2.5s of each 8s cycle, then rests. */
+  @keyframes heading-shine {
+    0% { background-position: 130% 0; }
+    30% { background-position: -60% 0; }
+    100% { background-position: -60% 0; }
+  }
+  .heading-shine {
+    background-image: linear-gradient(105deg, #ede8dc 42%, #fffaf0 50%, #ede8dc 58%);
+    background-size: 250% 100%;
+    background-position: 130% 0;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: heading-shine 8s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .heading-shine {
+      animation: none;
+      background-image: none;
+      color: inherit;
+    }
   }
 
   /* Age gate overlay */
