@@ -16,6 +16,7 @@ const Connect = lazy(() => import("./pages/Connect"));
 const Checkout = lazy(() => import("./pages/Checkout"));
 const CustomOrder = lazy(() => import("./pages/CustomOrder"));
 const Events = lazy(() => import("./pages/Events"));
+const Legal = lazy(() => import("./pages/Legal"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Full-screen black fallback: invisible against the site's black background,
@@ -36,6 +37,9 @@ function Router() {
         <Route path={"/checkout/:serviceId"} component={Checkout} />
         <Route path={"/custom-order"} component={CustomOrder} />
         <Route path={"/events"} component={Events} />
+        <Route path={"/privacy"}>{() => <Legal doc="privacy" />}</Route>
+        <Route path={"/terms"}>{() => <Legal doc="terms" />}</Route>
+        <Route path={"/2257"}>{() => <Legal doc="compliance" />}</Route>
         <Route path={"/404"} component={NotFound} />
         {/* Final fallback route */}
         <Route component={NotFound} />

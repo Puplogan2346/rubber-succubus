@@ -10,6 +10,12 @@ const footerLinks = [
   { label: "Connect", path: "/connect" },
 ];
 
+const legalLinks = [
+  { label: "Privacy", path: "/privacy" },
+  { label: "Terms", path: "/terms" },
+  { label: "2257", path: "/2257" },
+];
+
 export default function Footer() {
   const [, navigate] = useLocation();
 
@@ -77,6 +83,17 @@ export default function Footer() {
           <p className="text-xs text-cream/40">
             &copy; {new Date().getFullYear()} {brand.name}. All rights reserved.
           </p>
+          <div className="flex items-center gap-4 text-xs text-cream/30">
+            {legalLinks.map((link) => (
+              <button
+                key={link.path}
+                onClick={() => navigate(link.path)}
+                className="hover:text-cream/60 transition-colors"
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
           <p className="text-xs text-cream/30">
             18+ Adult Content. By using this site, you confirm you are of legal age.
           </p>

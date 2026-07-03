@@ -10,6 +10,7 @@ import VaultTeaser from "@/components/VaultTeaser";
 import StickyBookCTA from "@/components/StickyBookCTA";
 import Magnetic from "@/components/Magnetic";
 import TiltCard from "@/components/TiltCard";
+import WelcomeGift from "@/components/WelcomeGift";
 import { brand, testimonials } from "@/config/site";
 import { prefetchRoute } from "@/lib/routes";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -272,6 +273,9 @@ export default function Home() {
 
         {/* The Vault — hidden until vault.url is set in site.ts */}
         <VaultTeaser />
+
+        {/* Welcome gift funnel — hidden until welcomeGift.url is set in site.ts */}
+        <WelcomeGift />
 
         {/* Newsletter Section */}
         <section className="py-20 px-6 border-t border-red-900/15 bg-gradient-to-b from-black to-red-950/3">

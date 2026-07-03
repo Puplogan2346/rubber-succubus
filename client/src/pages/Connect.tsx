@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { Mail, ExternalLink, Send, CheckCircle, AlertCircle, Loader } from "lucide-react";
+import { Mail, ExternalLink, Send, CheckCircle, AlertCircle, Loader, Gift } from "lucide-react";
 import { m } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
-import { brand, integrations, isConfigured, socialLinks } from "@/config/site";
+import { brand, integrations, isConfigured, orderedSocialLinks, welcomeGift } from "@/config/site";
 import { emailError, requiredText } from "@/lib/validation";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
@@ -139,7 +139,7 @@ export default function Connect() {
             className="mb-16"
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-              {socialLinks.map((social, i) => (
+              {orderedSocialLinks.map((social, i) => (
                 <m.a
                   key={i}
                   href={social.live ? social.url : undefined}
@@ -377,10 +377,24 @@ export default function Connect() {
               <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex items-center gap-3 text-green-400 p-5 border border-green-900/40 bg-green-950/15 rounded-sm"
+                className="p-5 border border-green-900/40 bg-green-950/15 rounded-sm"
               >
-                <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                <span className="text-sm">You're subscribed! Welcome to the inner circle.</span>
+                <div className="flex items-center gap-3 text-green-400">
+                  <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                  <span className="text-sm">You're subscribed! Welcome to the inner circle.</span>
+                </div>
+                {/* Welcome gift unlock — shown once welcomeGift.url is set in site.ts */}
+                {welcomeGift.url && (
+                  <a
+                    href={welcomeGift.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-2 text-sm text-red-300 hover:text-red-200 underline underline-offset-2 transition-colors"
+                  >
+                    <Gift className="w-4 h-4" />
+                    Your welcome gift: {welcomeGift.label}
+                  </a>
+                )}
               </m.div>
             ) : (
               <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-2">

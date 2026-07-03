@@ -25,3 +25,19 @@
 - [x] Improve checkout summary display (shows all booking details)
 - [x] Add confirmation page after booking (step 2 shows summary)
 - [x] Test all form flows end-to-end (production build successful)
+
+## Funnel & Legal Round (2026-07, PR #8)
+- [x] Funnel-ordered social links (priority field in site.ts; live-first then
+      priority — OnlyFans jumps to the top the moment `live: true`)
+- [x] Welcome-gift email funnel (components/WelcomeGift.tsx on Home + unlock in
+      Connect newsletter success) — activate by setting `welcomeGift.url` in site.ts
+- [x] Draft legal pages at /privacy, /terms, /2257 (content in config/legal.ts,
+      linked from the footer)
+- [ ] OWNER: replace [bracketed] placeholders in config/legal.ts, review the
+      text (ideally with a lawyer), then set `legalReviewed = true`
+- [ ] OWNER: set `welcomeGift.url` to the free teaser location to switch the
+      funnel on
+- [ ] OWNER: set `integrations.gaMeasurementId` for analytics; tag bio links
+      with ?utm_source=twitter / telegram / linktree
+- [ ] After legal pages are finalized: add /privacy and /terms to
+      client/public/sitemap.xml
