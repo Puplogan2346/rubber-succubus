@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import { brand, getService, integrations, isConfigured } from "@/config/site";
 import { emailError, requiredText } from "@/lib/validation";
+import { tapMedium } from "@/lib/haptics";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 interface FormErrors {
@@ -52,6 +53,7 @@ export default function Checkout() {
   };
 
   const handleStripePayment = async () => {
+    tapMedium();
     setIsSubmitting(true);
     setSubmitError("");
 

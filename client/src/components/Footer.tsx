@@ -1,4 +1,5 @@
 import { useLocation } from "wouter";
+import { Capacitor } from "@capacitor/core";
 import { brand } from "@/config/site";
 
 const footerLinks = [
@@ -77,6 +78,15 @@ export default function Footer() {
           <p className="text-xs text-cream/30">
             18+ Adult Content. By using this site, you confirm you are of legal age.
           </p>
+          {/* Owner-only content editor; the link exists only inside the iPhone app. */}
+          {Capacitor.isNativePlatform() && (
+            <button
+              onClick={() => navigate("/admin")}
+              className="text-xs text-cream/30 hover:text-cream/60 transition-colors"
+            >
+              Admin
+            </button>
+          )}
         </div>
       </div>
     </footer>

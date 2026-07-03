@@ -31,6 +31,7 @@ export default function StickyBookCTA() {
         >
           <button
             onClick={() => navigate("/services")}
+            data-haptic="medium"
             className="w-full btn-sheen bg-red-700 hover:bg-red-600 text-white py-3 rounded-sm uppercase tracking-wider font-semibold text-sm flex items-center justify-center gap-2"
           >
             Book a Session

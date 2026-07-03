@@ -16,6 +16,8 @@ const Checkout = lazy(() => import("./pages/Checkout"));
 const CustomOrder = lazy(() => import("./pages/CustomOrder"));
 const Events = lazy(() => import("./pages/Events"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+// Content editor for the iPhone app; renders NotFound on the public website.
+const Admin = lazy(() => import("./pages/Admin"));
 
 // Full-screen black fallback: invisible against the site's black background,
 // so route chunks load without a visible flash.
@@ -35,6 +37,7 @@ function Router() {
         <Route path={"/checkout/:serviceId"} component={Checkout} />
         <Route path={"/custom-order"} component={CustomOrder} />
         <Route path={"/events"} component={Events} />
+        <Route path={"/admin"} component={Admin} />
         <Route path={"/404"} component={NotFound} />
         {/* Final fallback route */}
         <Route component={NotFound} />

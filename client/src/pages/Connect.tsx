@@ -7,6 +7,7 @@ import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { brand, integrations, isConfigured, socialLinks } from "@/config/site";
 import { emailError, requiredText } from "@/lib/validation";
+import { notifySuccess } from "@/lib/haptics";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 interface ContactFormErrors {
@@ -63,6 +64,7 @@ export default function Connect() {
     if (!isConfigured(integrations.formspreeFormId)) {
       const subject = encodeURIComponent(contactForm.subject || `Inquiry from ${brand.name} site`);
       const body = encodeURIComponent(`Name: ${contactForm.name}\nEmail: ${contactForm.email}\n\n${contactForm.message}`);
+      notifySuccess();
       window.location.href = `mailto:${brand.email}?subject=${subject}&body=${body}`;
       return;
     }
@@ -75,6 +77,7 @@ export default function Connect() {
         body: JSON.stringify(contactForm),
       });
       if (res.ok) {
+        notifySuccess();
         setContactStatus("success");
         setContactForm({ name: "", email: "", subject: "", message: "" });
         setContactErrors({});
@@ -95,6 +98,7 @@ export default function Connect() {
     }
 
     if (!isConfigured(integrations.mailchimpActionUrl)) {
+      notifySuccess();
       window.location.href = `mailto:${brand.email}?subject=Newsletter%20Signup&body=Please%20add%20me%20to%20your%20newsletter%3A%20${encodeURIComponent(newsletterEmail)}`;
       return;
     }
@@ -104,6 +108,7 @@ export default function Connect() {
       const formData = new FormData();
       formData.append("EMAIL", newsletterEmail);
       await fetch(integrations.mailchimpActionUrl, { method: "POST", body: formData, mode: "no-cors" });
+      notifySuccess();
       setNewsletterStatus("success");
       setNewsletterEmail("");
       setNewsletterErrors({});
