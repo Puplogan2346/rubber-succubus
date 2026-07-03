@@ -56,18 +56,26 @@ iPhone** — the Simulator stays silent.
 
 ## 2. Which URL the app loads
 
-The app points at `https://rubbersuccubus.com` (see `capacitor.config.ts`).
-If that domain isn't serving the site yet, switch it to the Netlify URL:
+The app points at `https://rubbbersuccubus.netlify.app` (see
+`capacitor.config.ts`) — the host that reliably auto-deploys from `main`.
+
+Heads-up: the **GitHub Pages** deploy workflow (which would serve
+`rubbersuccubus.com`) was failing at the deploy step — that usually means
+Pages isn't enabled. To fix: repo **Settings → Pages → Source: GitHub
+Actions**, and configure the custom domain there. Once
+`https://rubbersuccubus.com` loads the site in a browser, you can point
+the app at it instead:
 
 ```ts
 // capacitor.config.ts
 server: {
-  url: "https://rubbbersuccubus.netlify.app",
+  url: "https://rubbersuccubus.com",
   ...
 }
 ```
 
-then rerun `pnpm ios:sync` and Run from Xcode again.
+then rerun `pnpm ios:sync` and Run from Xcode again. (This is optional —
+the Netlify URL serves the exact same site either way.)
 
 Links that leave the site (Stripe checkout, socials, the vault, email)
 open in Safari/Mail automatically; only the site itself stays in-app.
