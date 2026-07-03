@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Camera, Film, HelpCircle, Calendar, Link2, ArrowRight } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
@@ -42,14 +42,12 @@ export default function Home() {
         <Navigation />
 
         {/* Hero Section with Background Image */}
-        <section className="relative h-screen md:h-[600px] overflow-hidden -mx-6 md:mx-0 mt-16">
-          {/* Background Image */}
+        <section className="relative h-screen md:h-[600px] overflow-hidden mt-16">
+          {/* Background image. Fixed attachment (parallax) only on md+ —
+              iOS Safari renders fixed+cover backgrounds zoomed and janky. */}
           <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: "url('/bg.webp')",
-              backgroundAttachment: 'fixed'
-            }}
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat md:bg-fixed"
+            style={{ backgroundImage: "url('/bg.webp')" }}
           />
           
           {/* Overlay gradients for text readability */}
@@ -61,13 +59,13 @@ export default function Home() {
 
           {/* Content */}
           <div className="relative h-full flex items-center justify-center px-6">
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               className="text-center max-w-3xl"
             >
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1, duration: 0.5 }}
@@ -76,50 +74,50 @@ export default function Home() {
                 <div className="w-20 h-20 bg-gradient-to-br from-red-800 to-red-950 rounded-full flex items-center justify-center border border-red-700/60 mx-auto shadow-2xl shadow-red-900/40">
                   <span className="text-4xl font-serif italic text-red-200">R</span>
                 </div>
-              </motion.div>
+              </m.div>
 
-              <motion.h1
+              <m.h1
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="text-5xl md:text-6xl lg:text-7xl font-serif italic mb-4 tracking-tight leading-[1.1] text-cream drop-shadow-lg"
               >
                 {brand.name}
-              </motion.h1>
+              </m.h1>
 
-              <motion.div
+              <m.div
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
                 className="h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent max-w-xs mx-auto mb-6"
               />
 
-              <motion.p
+              <m.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
                 className="text-xs uppercase tracking-[0.3em] text-red-300 mb-6 drop-shadow"
               >
                 Ginger Nut-Hunter
-              </motion.p>
+              </m.p>
 
-              <motion.p
+              <m.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
                 className="text-lg md:text-xl text-cream/90 mb-10 leading-relaxed font-light drop-shadow-lg"
               >
                 Just a ginger with an eye for a good nut. Mixing kinky secrets with sweet, spicy chaos.
-              </motion.p>
+              </m.p>
 
               {/* CTA Buttons */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
                 className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center items-center sm:items-stretch"
               >
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+                <m.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                   <Button
                     onClick={() => navigate("/services")}
                     className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold shadow-lg shadow-red-900/60 flex items-center justify-center gap-2 w-full sm:w-auto"
@@ -127,8 +125,8 @@ export default function Home() {
                     Explore Services
                     <ArrowRight className="w-4 h-4" />
                   </Button>
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+                </m.div>
+                <m.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                   <Button
                     onClick={() => navigate("/connect")}
                     variant="outline"
@@ -136,9 +134,9 @@ export default function Home() {
                   >
                     Get Connected
                   </Button>
-                </motion.div>
-              </motion.div>
-            </motion.div>
+                </m.div>
+              </m.div>
+            </m.div>
           </div>
         </section>
 
@@ -148,7 +146,7 @@ export default function Home() {
         {/* Explore Section */}
         <section className="py-20 px-6 border-y border-red-900/15 bg-gradient-to-b from-black to-red-950/5">
           <div className="max-w-6xl mx-auto">
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -156,11 +154,11 @@ export default function Home() {
             >
               <h2 className="text-3xl md:text-4xl font-serif italic text-center mb-4">Explore</h2>
               <div className="garnet-rule max-w-[60px] mx-auto mb-14" />
-            </motion.div>
+            </m.div>
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-5">
               {exploreItems.map((item, i) => (
-                <motion.button
+                <m.button
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -178,7 +176,7 @@ export default function Home() {
                     {item.title}
                   </h3>
                   <p className="text-xs text-cream/45 leading-relaxed">{item.desc}</p>
-                </motion.button>
+                </m.button>
               ))}
             </div>
           </div>
@@ -187,7 +185,7 @@ export default function Home() {
         {/* About Section */}
         <section className="py-20 px-6">
           <div className="max-w-4xl mx-auto">
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -208,7 +206,7 @@ export default function Home() {
               </div>
 
               {/* Quote */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -218,8 +216,8 @@ export default function Home() {
                 <p className="text-lg text-cream/60 italic font-light">
                   "Every frame tells a story. Mine just happens to be deliciously kinky."
                 </p>
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </div>
         </section>
 
@@ -227,7 +225,7 @@ export default function Home() {
         {testimonials.length > 0 && (
           <section className="py-20 px-6 border-t border-red-900/15 bg-gradient-to-b from-black to-red-950/3">
             <div className="max-w-5xl mx-auto">
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
@@ -235,11 +233,11 @@ export default function Home() {
               >
                 <h2 className="text-3xl md:text-4xl font-serif italic text-center mb-4">Kind Words</h2>
                 <div className="garnet-rule max-w-[60px] mx-auto mb-14" />
-              </motion.div>
+              </m.div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {testimonials.map((testimonial, i) => (
-                  <motion.figure
+                  <m.figure
                     key={i}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -254,7 +252,7 @@ export default function Home() {
                     <figcaption className="text-[10px] uppercase tracking-widest text-red-400/70">
                       — {testimonial.attribution}
                     </figcaption>
-                  </motion.figure>
+                  </m.figure>
                 ))}
               </div>
             </div>
@@ -267,7 +265,7 @@ export default function Home() {
         {/* Newsletter Section */}
         <section className="py-20 px-6 border-t border-red-900/15 bg-gradient-to-b from-black to-red-950/3">
           <div className="max-w-2xl mx-auto">
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -279,15 +277,15 @@ export default function Home() {
               <p className="text-cream/60 mb-8 font-light">
                 Get notified when new content drops and exclusive announcements.
               </p>
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                 <Button
                   onClick={() => navigate("/connect")}
                   className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold"
                 >
                   Subscribe
                 </Button>
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           </div>
         </section>
 

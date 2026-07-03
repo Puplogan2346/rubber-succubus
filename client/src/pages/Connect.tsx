@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Mail, ExternalLink, Send, CheckCircle, AlertCircle, Loader } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { brand, integrations, isConfigured, socialLinks } from "@/config/site";
@@ -118,7 +118,7 @@ export default function Connect() {
       <div className="pb-20 px-6">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -129,10 +129,10 @@ export default function Connect() {
             <p className="text-cream/60 max-w-2xl text-base md:text-lg font-light leading-relaxed">
               Follow me across all platforms to stay updated on new content, behind-the-scenes moments, and exclusive drops.
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Social Links Grid */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.5 }}
@@ -140,7 +140,7 @@ export default function Connect() {
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
               {socialLinks.map((social, i) => (
-                <motion.a
+                <m.a
                   key={i}
                   href={social.live ? social.url : undefined}
                   target={social.live ? "_blank" : undefined}
@@ -165,13 +165,13 @@ export default function Connect() {
                       Visit <ExternalLink className="w-2.5 h-2.5" />
                     </div>
                   )}
-                </motion.a>
+                </m.a>
               ))}
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Email Contact */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
@@ -190,10 +190,10 @@ export default function Connect() {
                 <p className="text-[11px] uppercase tracking-widest text-cream/35 mt-3">{brand.responseTime}</p>
               </div>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Contact Form */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
@@ -205,14 +205,14 @@ export default function Connect() {
             </p>
 
             {contactStatus === "success" ? (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex items-center gap-3 text-green-400 p-5 border border-green-900/40 bg-green-950/15 rounded-sm"
               >
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
                 <span className="text-sm">Message sent! I'll get back to you soon.</span>
-              </motion.div>
+              </m.div>
             ) : (
               <form onSubmit={handleContactSubmit} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
@@ -339,7 +339,7 @@ export default function Connect() {
                     <span>Something went wrong. Please email me directly.</span>
                   </div>
                 )}
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button
                     type="submit"
                     disabled={contactStatus === "sending"}
@@ -357,13 +357,13 @@ export default function Connect() {
                       </>
                     )}
                   </Button>
-                </motion.div>
+                </m.div>
               </form>
             )}
-          </motion.div>
+          </m.div>
 
           {/* Newsletter Signup */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
@@ -374,14 +374,14 @@ export default function Connect() {
               Get notified when new content drops, special offers, and exclusive announcements.
             </p>
             {newsletterStatus === "success" ? (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex items-center gap-3 text-green-400 p-5 border border-green-900/40 bg-green-950/15 rounded-sm"
               >
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
                 <span className="text-sm">You're subscribed! Welcome to the inner circle.</span>
-              </motion.div>
+              </m.div>
             ) : (
               <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-2">
                 <div className="relative">
@@ -408,7 +408,7 @@ export default function Connect() {
                     {newsletterErrors.email}
                   </p>
                 )}
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button
                     type="submit"
                     disabled={newsletterStatus === "sending"}
@@ -423,10 +423,10 @@ export default function Connect() {
                       "Subscribe"
                     )}
                   </Button>
-                </motion.div>
+                </m.div>
               </form>
             )}
-          </motion.div>
+          </m.div>
         </div>
       </div>
 

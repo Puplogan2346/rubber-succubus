@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { brand, commissions, primarySocials } from "@/config/site";
 import AnnouncementBanner from "./AnnouncementBanner";
 
@@ -138,7 +138,7 @@ export default function Navigation() {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
+          <m.div
             ref={menuRef}
             id="mobile-menu"
             role="dialog"
@@ -152,7 +152,7 @@ export default function Navigation() {
           >
             <div className="flex flex-col gap-2 max-w-sm mx-auto mt-8">
               {navItems.map((item, i) => (
-                <motion.button
+                <m.button
                   key={item.path}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -168,11 +168,11 @@ export default function Navigation() {
                   }`}
                 >
                   {item.label}
-                </motion.button>
+                </m.button>
               ))}
 
               {/* Mobile Social Links */}
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navItems.length * 0.05 }}
@@ -198,10 +198,10 @@ export default function Navigation() {
                     );
                   })}
                 </div>
-              </motion.div>
+              </m.div>
 
               {/* Mobile CTA */}
-              <motion.button
+              <m.button
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: (navItems.length + 1) * 0.05 }}
@@ -212,9 +212,9 @@ export default function Navigation() {
                 className="mt-6 text-sm uppercase tracking-widest text-cream/40 hover:text-cream/60 transition-colors"
               >
                 ← Back to Home
-              </motion.button>
+              </m.button>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

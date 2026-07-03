@@ -12,7 +12,7 @@ import {
   AlertCircle,
   Send,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import { brand, integrations, isConfigured } from "@/config/site";
 import { emailError, requiredText } from "@/lib/validation";
@@ -150,7 +150,7 @@ export default function CustomOrder() {
     <PageWrapper>
       <div className="pb-20 px-6">
         <div className="max-w-2xl mx-auto mt-8 md:mt-12">
-          <motion.button
+          <m.button
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             onClick={() => navigate("/services")}
@@ -158,9 +158,9 @@ export default function CustomOrder() {
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Services
-          </motion.button>
+          </m.button>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -171,7 +171,7 @@ export default function CustomOrder() {
             <p className="text-cream/60 font-light">
               Three quick steps. The more you tell me, the better it gets.
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Progress */}
           <div className="flex items-center gap-3 mb-8">
@@ -184,7 +184,7 @@ export default function CustomOrder() {
 
           <AnimatePresence mode="wait">
             {step === 1 && (
-              <motion.div
+              <m.div
                 key="step1"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -246,7 +246,7 @@ export default function CustomOrder() {
                   </p>
                 )}
 
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button
                     onClick={nextFromStep1}
                     className="w-full btn-sheen bg-red-700 hover:bg-red-600 text-white py-3 uppercase tracking-wider font-semibold flex items-center justify-center gap-2"
@@ -254,12 +254,12 @@ export default function CustomOrder() {
                     Next: The Brief
                     <ArrowRight className="w-4 h-4" />
                   </Button>
-                </motion.div>
-              </motion.div>
+                </m.div>
+              </m.div>
             )}
 
             {step === 2 && (
-              <motion.div
+              <m.div
                 key="step2"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -349,7 +349,7 @@ export default function CustomOrder() {
                   >
                     Back
                   </Button>
-                  <motion.div className="flex-1" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <m.div className="flex-1" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Button
                       onClick={nextFromStep2}
                       className="w-full btn-sheen bg-red-700 hover:bg-red-600 text-white py-3 uppercase tracking-wider font-semibold flex items-center justify-center gap-2"
@@ -357,13 +357,13 @@ export default function CustomOrder() {
                       Next: Contact
                       <ArrowRight className="w-4 h-4" />
                     </Button>
-                  </motion.div>
+                  </m.div>
                 </div>
-              </motion.div>
+              </m.div>
             )}
 
             {step === 3 && (
-              <motion.div
+              <m.div
                 key="step3"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -372,7 +372,7 @@ export default function CustomOrder() {
                 className="border border-red-900/25 bg-black/30 p-6 md:p-8 rounded-sm"
               >
                 {status === "success" ? (
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="flex items-center gap-3 text-green-400 p-5 border border-green-900/40 bg-green-950/15 rounded-sm"
@@ -381,7 +381,7 @@ export default function CustomOrder() {
                     <span className="text-sm">
                       Brief received! I'll reply within 48 hours with a quote.
                     </span>
-                  </motion.div>
+                  </m.div>
                 ) : (
                   <>
                     <h3 className="font-serif italic text-xl mb-1">Almost there</h3>
@@ -481,7 +481,7 @@ export default function CustomOrder() {
                         >
                           Back
                         </Button>
-                        <motion.div className="flex-1" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                        <m.div className="flex-1" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                           <Button
                             type="submit"
                             disabled={status === "sending"}
@@ -490,12 +490,12 @@ export default function CustomOrder() {
                             <Send className="w-4 h-4" />
                             {status === "sending" ? "Sending..." : "Send My Brief"}
                           </Button>
-                        </motion.div>
+                        </m.div>
                       </div>
                     </form>
                   </>
                 )}
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import { useLocation } from "wouter";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function NotFound() {
@@ -13,7 +13,7 @@ export default function NotFound() {
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-red-900/5 rounded-full blur-[100px]" />
 
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -30,7 +30,7 @@ export default function NotFound() {
           Head back and try something shinier.
         </p>
 
-        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+        <m.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
           <Button
             onClick={() => navigate("/")}
             className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold flex items-center gap-2 mx-auto"
@@ -38,8 +38,8 @@ export default function NotFound() {
             <Home className="w-4 h-4" />
             Back to Home
           </Button>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </div>
   );
 }

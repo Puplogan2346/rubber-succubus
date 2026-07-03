@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { brand } from "@/config/site";
 
 const STORAGE_KEY = "rs-age-verified";
@@ -48,14 +48,14 @@ export default function AgeGate({ children }: { children: React.ReactNode }) {
       {/* Radial glow behind logo */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-900/10 rounded-full blur-[120px]" />
 
-      <motion.div
+      <m.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
         className="relative z-10 text-center px-6 max-w-md"
       >
         {/* Logo emblem */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
@@ -64,34 +64,34 @@ export default function AgeGate({ children }: { children: React.ReactNode }) {
           <div className="w-20 h-20 bg-gradient-to-br from-red-800 to-red-950 rounded-full flex items-center justify-center border border-red-700/60 shadow-lg shadow-red-900/30">
             <span className="text-4xl font-serif italic text-red-200">R</span>
           </div>
-        </motion.div>
+        </m.div>
 
-        <motion.h1
+        <m.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.5 }}
           className="text-5xl md:text-6xl font-serif italic text-cream mb-3 tracking-tight"
         >
           {brand.name}
-        </motion.h1>
+        </m.h1>
 
-        <motion.div
+        <m.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ delay: 0.5, duration: 0.6 }}
           className="h-px bg-gradient-to-r from-transparent via-red-700 to-transparent mb-6"
         />
 
-        <motion.p
+        <m.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
           className="text-xs uppercase tracking-[0.3em] text-red-400 mb-8"
         >
           18+ Only &bull; Adults Only
-        </motion.p>
+        </m.p>
 
-        <motion.p
+        <m.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
@@ -99,9 +99,9 @@ export default function AgeGate({ children }: { children: React.ReactNode }) {
         >
           This website contains adult content intended for mature audiences only.
           By entering, you confirm you are 18 years of age or older.
-        </motion.p>
+        </m.p>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
@@ -120,8 +120,8 @@ export default function AgeGate({ children }: { children: React.ReactNode }) {
           >
             Exit
           </Button>
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </div>
   );
 }

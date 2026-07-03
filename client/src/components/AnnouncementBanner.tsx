@@ -35,7 +35,12 @@ export default function AnnouncementBanner() {
 
   useEffect(() => {
     if (!target || !announcement.message || dismissed) return;
-    const timer = setInterval(() => setCountdown(remainingParts(target)), 1000);
+    const timer = setInterval(() => {
+      const parts = remainingParts(target);
+      setCountdown(parts);
+      // Countdown expired — nothing left to tick.
+      if (parts === null) clearInterval(timer);
+    }, 1000);
     return () => clearInterval(timer);
   }, [announcement.targetDate, dismissed]);
 

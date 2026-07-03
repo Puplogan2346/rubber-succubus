@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { Image, Play, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import PageWrapper from "@/components/PageWrapper";
 import Footer from "@/components/Footer";
 import { galleryItems } from "@/config/site";
@@ -38,7 +38,7 @@ export default function Gallery() {
       <div className="pb-20 px-6">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -50,14 +50,14 @@ export default function Gallery() {
               A showcase of my best work. Photography, videography, and custom content
               celebrating rubber, latex, and gimp aesthetics.
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Gallery Grid - Masonry-style with CSS columns */}
           <div className="columns-1 sm:columns-2 md:columns-3 gap-4 mb-16">
             {galleryItems.map((item, i) => {
               const tile = (
                 <div
-                  className={`${item.aspect} relative border border-red-900/30 bg-red-950/8 overflow-hidden group cursor-pointer rounded-sm`}
+                  className={`${item.aspect} relative border border-red-900/30 bg-red-950/8 overflow-hidden group rounded-sm`}
                 >
                   {item.src ? (
                     /* Real content */
@@ -65,6 +65,7 @@ export default function Gallery() {
                       src={item.src}
                       alt={item.alt ?? ""}
                       loading="lazy"
+                      decoding="async"
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
                   ) : (
@@ -105,7 +106,7 @@ export default function Gallery() {
               );
 
               return (
-                <motion.div
+                <m.div
                   key={item.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -134,14 +135,14 @@ export default function Gallery() {
                   ) : (
                     tile
                   )}
-                </motion.div>
+                </m.div>
               );
             })}
           </div>
 
           {/* Empty state message — hidden once real content exists */}
           {!galleryItems.some((item) => item.src) && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -154,11 +155,11 @@ export default function Gallery() {
                 Full portfolio with high-resolution photos and videos is being prepared.
                 Follow my socials for the latest drops.
               </p>
-            </motion.div>
+            </m.div>
           )}
 
           {/* CTA */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -170,7 +171,7 @@ export default function Gallery() {
               Check out my social media for the full portfolio, behind-the-scenes content, and exclusive drops.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <m.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                 <Button
                   onClick={() => navigate("/connect")}
                   className="btn-sheen bg-red-700 hover:bg-red-600 text-white px-8 py-3 uppercase tracking-wider font-semibold flex items-center gap-2"
@@ -178,8 +179,8 @@ export default function Gallery() {
                   Follow My Socials
                   <ExternalLink className="w-4 h-4" />
                 </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              </m.div>
+              <m.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
                 <Button
                   onClick={() => navigate("/services")}
                   variant="outline"
@@ -187,9 +188,9 @@ export default function Gallery() {
                 >
                   Book a Session
                 </Button>
-              </motion.div>
+              </m.div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
 

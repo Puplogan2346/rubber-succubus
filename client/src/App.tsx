@@ -1,9 +1,8 @@
 import { lazy, Suspense } from "react";
-import { MotionConfig } from "framer-motion";
+import { LazyMotion, MotionConfig, domAnimation } from "framer-motion";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-import BackgroundImage from "./components/BackgroundImage";
 import AgeGate from "./components/AgeGate";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -46,16 +45,17 @@ function Router() {
 function App() {
   return (
     <ErrorBoundary>
-      <BackgroundImage />
       <ThemeProvider
         defaultTheme="dark"
       >
-        <MotionConfig reducedMotion="user">
-          <ScrollToTop />
-          <AgeGate>
-            <Router />
-          </AgeGate>
-        </MotionConfig>
+        <LazyMotion features={domAnimation} strict>
+          <MotionConfig reducedMotion="user">
+            <ScrollToTop />
+            <AgeGate>
+              <Router />
+            </AgeGate>
+          </MotionConfig>
+        </LazyMotion>
       </ThemeProvider>
     </ErrorBoundary>
   );
