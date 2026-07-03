@@ -10,7 +10,7 @@ export default function NotFound() {
   const [, navigate] = useLocation();
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-black text-cream relative overflow-hidden">
+    <div className="min-h-svh w-full flex items-center justify-center bg-black text-cream relative overflow-hidden">
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-red-900/5 rounded-full blur-[100px]" />
 

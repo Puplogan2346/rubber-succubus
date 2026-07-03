@@ -46,7 +46,9 @@ export default function Home() {
         <Navigation />
 
         {/* Hero Section with Background Image */}
-        <section className="relative h-screen md:h-[600px] overflow-hidden mt-16">
+        {/* h-svh: small-viewport height so the CTAs stay above the fold on
+            iOS Safari, where 100vh includes the collapsed address bar */}
+        <section className="relative h-svh md:h-[600px] overflow-hidden mt-16">
           {/* Background image. Fixed attachment (parallax) only on md+ —
               iOS Safari renders fixed+cover backgrounds zoomed and janky. */}
           <div

@@ -34,7 +34,7 @@ export default function AgeGate({ children }: { children: React.ReactNode }) {
   if (verified) return <>{children}</>;
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-black relative overflow-hidden">
+    <div className="min-h-svh w-full flex items-center justify-center bg-black relative overflow-hidden">
       {/* Shiny textured background */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-red-950/3 via-black to-black" />
